@@ -1,9 +1,6 @@
 package com.agriweb.agripriceshop.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,10 +14,14 @@ public class Board {
     @Column(name="board_id")
     private Long id;
 
+    @Column(length = 50)
     private String boardTitle;
 
+    @Column(length = 5000)
     private String boardContent;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private String writer;
 
     private LocalDateTime regdate;

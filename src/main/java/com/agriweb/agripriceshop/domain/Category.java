@@ -19,6 +19,6 @@ public class Category {
 
     private String name;
 
-    private List<Item> items;
+
 
 }
