@@ -20,14 +20,23 @@ public class MemberRepository {
         return em.find(Member.class, id);
     }
 
+    // 회원 전체 리스트 가져오기
     public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class).getResultList();
     }
 
+    // 회원가입시 중복ID 확인
     public List<Member> findByLoginId(String loginId) {
         return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
                 .setParameter("loginId", loginId)
                 .getResultList();
+    }
+
+    // 로그인시 해당되는 Member class 값 가져오기
+    public Member loginByLoginId(String loginId) {
+        return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
+                .setParameter("loginId", loginId)
+                .getSingleResult();
     }
 
 }
