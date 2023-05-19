@@ -1,6 +1,7 @@
 package com.agriweb.agripriceshop.controller;
 
 import com.agriweb.agripriceshop.domain.Address;
+import com.agriweb.agripriceshop.domain.Member;
 import com.agriweb.agripriceshop.dto.MemberDto;
 import com.agriweb.agripriceshop.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,9 @@ public class MemberController {
             return "members/createMemberForm";  // 회원가입 페이지로 이동
         }
         Address address = new Address(dto.getCity(), dto.getStreet(), dto.getZipcode());
+
+        Member member = new Member(dto);
+
 
     }
 
