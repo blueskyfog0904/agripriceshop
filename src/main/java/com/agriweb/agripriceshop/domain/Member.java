@@ -1,6 +1,8 @@
 package com.agriweb.agripriceshop.domain;
 
+import com.agriweb.agripriceshop.dto.MemberDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@Builder
 public class Member {
 
     @Id @GeneratedValue
@@ -33,8 +36,8 @@ public class Member {
     @Column
     private String tel;
 
-    @Embedded
-    private Address addr;
+    @Column
+    private String addr;
 
     @Column
     private String email;
@@ -44,6 +47,22 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Board> boards;
+
+    //== 생성 메서드==//
+    public static Member createMember(MemberDto dto){
+        Member member = new Member();
+        member.setLoginId(dto.getLoginId());
+        member.setPw(dto.getPw());
+        member.setUserName(dto.getUserName());
+        member.setBirthdate(dto.getBirthdate());
+        member.setGender(dto.getGender());
+        member.setTel(dto.getTel());
+        member.setAddr(dto.getAddr());
+        member.setEmail(dto.getEmail());
+
+        return member;
+    }
+
 
 
 }

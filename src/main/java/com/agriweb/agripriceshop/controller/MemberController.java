@@ -24,10 +24,10 @@ public class MemberController {
         if (result.hasErrors()) {
             return "members/createMemberForm";  // 회원가입 페이지로 이동
         }
-        Address address = new Address(dto.getCity(), dto.getStreet(), dto.getZipcode());
 
-        Member member = new Member(dto);
-
+        Member member = Member.createMember(dto);
+        memberService.join(member);
+        return "redirect:/";
 
     }
 
