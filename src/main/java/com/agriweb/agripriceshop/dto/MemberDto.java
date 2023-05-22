@@ -4,6 +4,7 @@ import com.agriweb.agripriceshop.domain.Address;
 import com.agriweb.agripriceshop.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString
 @Data
+@Builder
 @Schema(description = "Member 관련 Dto")
 public class MemberDto {
 

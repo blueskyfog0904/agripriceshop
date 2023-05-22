@@ -2,16 +2,14 @@ package com.agriweb.agripriceshop.domain;
 
 import com.agriweb.agripriceshop.dto.MemberDto;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter @Setter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id @GeneratedValue

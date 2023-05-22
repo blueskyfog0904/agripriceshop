@@ -45,7 +45,7 @@ public class MemberService {
         }
 
         // 4. 업데이트
-        target.
+
 
     }
 
