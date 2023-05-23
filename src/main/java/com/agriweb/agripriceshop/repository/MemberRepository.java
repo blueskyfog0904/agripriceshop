@@ -19,6 +19,9 @@ public class MemberRepository {
     public Member findOne(Long id) {
         return em.find(Member.class, id);
     }
+    public void deleteOne(Member member) {
+        em.remove(member);
+    }
 
     // 회원 전체 리스트 가져오기
     public List<Member> findAll() {

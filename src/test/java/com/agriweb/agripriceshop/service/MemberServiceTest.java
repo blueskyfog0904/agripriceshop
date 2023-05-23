@@ -1,16 +1,19 @@
 package com.agriweb.agripriceshop.service;
 
 import com.agriweb.agripriceshop.domain.Member;
+import com.agriweb.agripriceshop.dto.MemberDto;
 import com.agriweb.agripriceshop.repository.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 @SpringBootTest
+@WebAppConfiguration
 @Transactional
 public class MemberServiceTest {
 
@@ -22,21 +25,71 @@ public class MemberServiceTest {
     @Test
     public void 회원가입() throws Exception {
         //given
-        Member member = new Member();
-        member.setUserName("kim");
-        member.setPw("1234");
-        member.setLoginId("kim1234");
-        member.setBirthdate(LocalDate.ofEpochDay(19850904));
-        member.setGender("남");
-        member.setEmail("kim1234@naver.com");
-        member.setTel("01012341234");
+        MemberDto dto = new MemberDto();
+        dto.setUserName("kim");
+        dto.setPw("1234");
+        dto.setLoginId("kim1234");
+        dto.setBirthdate(LocalDate.ofEpochDay(19850904));
+        dto.setGender("남");
+        dto.setEmail("kim1234@naver.com");
+        dto.setTel("01012341234");
+        Member member = Member.createMember(dto);
 
 
         //when
-        Long saveId = memberService.join(member);
+        Member member2 = memberService.join(member);
 
         //then
-        Assertions.assertEquals(member, memberRepository.findOne(saveId));
+        Assertions.assertEquals(member, memberRepository.findOne(member2.getId()));
+
+    }
+    @Test
+    public void 회원삭제() throws Exception {
+        // given
+        MemberDto dto = new MemberDto();
+        dto.setUserName("kim");
+        dto.setPw("1234");
+        dto.setLoginId("kim1234");
+        dto.setBirthdate(LocalDate.ofEpochDay(19850904));
+        dto.setGender("남");
+        dto.setEmail("kim1234@naver.com");
+        dto.setTel("01012341234");
+        Member member = Member.createMember(dto);
+        Member member1 = memberService.join(member);
+
+        // when
+        memberService.delete(member1.getId());
+
+        // then
+        Assertions.assertEquals(null, memberRepository.findOne(member1.getId()));
+
+    }
+
+
+    @Test
+    public void 회원수정업데이트() throws Exception {
+        // given
+        Member member1 = new Member();
+        member1.setUserName("kim");
+        member1.setPw("1234");
+        member1.setLoginId("kim1234");
+        member1.setBirthdate(LocalDate.ofEpochDay(19850904));
+        member1.setGender("남");
+        member1.setEmail("kim1234@naver.com");
+        member1.setTel("01012341234");
+
+        MemberDto dto = new MemberDto();
+        dto.setPw("4321");
+        dto.setTel("01043214321");
+        dto.setAddr("전북 남원시");
+        dto.setEmail("ahn1234@naver.com");
+
+        // when
+        Member member2 = memberService.join(member1);
+        Member member3 = memberService.update(member1.getId(), dto);
+
+        // then
+        Assertions.assertEquals(member1, memberRepository.findOne(member2.getId()));
 
     }
     @Test

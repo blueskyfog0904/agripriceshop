@@ -57,6 +57,19 @@ public class MemberApiController {
     }
 
     // 회원 삭제 API
+    @Operation(summary = "회원정보삭제 메서드", description = "회원정보삭제 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<Member> delete(@PathVariable Long id) {
+
+        Member deleted = memberService.delete(id);
+        return (deleted != null)? ResponseEntity.status(HttpStatus.OK).body(deleted):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+    }
 
 
     // 회원 수정 API
@@ -67,9 +80,10 @@ public class MemberApiController {
     })
     @PutMapping(value = "{id}")
     public ResponseEntity<Member> updateMember(@PathVariable Long id,
-                                               @RequestBody Member dto){
-
-
+                                               @RequestBody MemberDto dto){
+        Member updated = memberService.update(id, dto);
+        return (updated !=null) ? ResponseEntity.status(HttpStatus.OK).body(updated):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
     }
 

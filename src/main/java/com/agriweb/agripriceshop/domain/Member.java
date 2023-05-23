@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id @GeneratedValue
@@ -60,7 +60,6 @@ public class Member {
 
         return member;
     }
-
 
 
 }

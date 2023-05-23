@@ -29,26 +29,49 @@ public class MemberService {
         return member;
     }
 
+    // 회원 정보 삭제
+    @Transactional
+    public Member delete(Long id) {
+        Member target = memberRepository.findOne(id);
+
+        if(target == null) {
+            return null;
+        }
+        // 삭제
+        memberRepository.deleteOne(target);
+        return target;
+    }
+
     // 회원 정보 수정
     @Transactional
     public Member update(Long id, MemberDto dto) {
-        // 1. 수정용 엔티티 생성
-        Member member = dto.toEntity();
 
-        // 2. 대상 엔티티 찾기
+        // 1. 대상 엔티티 찾기
         Member target = memberRepository.findOne(id);
 
-        // 3. 잘못된 요청 처리(대상이 없거나, id가 다른 경우
-        if (target == null || id != member.getId()) {
-            log.info("잘못된 요청! id: {}, member: {}", id, member.toString());
+        // 2. 잘못된 요청 처리
+        if(target == null || target.getId() != id) {
             return null;
         }
 
-        // 4. 업데이트
-
-
+        // 3. 업데이트
+        if (dto.getPw() != null) {
+           target.setPw(dto.getPw());
+        }
+        if (dto.getTel() != null) {
+            target.setTel(dto.getTel());
+        }
+        if (dto.getAddr() != null) {
+            target.setAddr(dto.getAddr());
+        }
+        if (dto.getEmail() != null) {
+            target.setEmail(dto.getEmail());
+        }
+        memberRepository.save(target);
+        return target;
     }
 
+    // 회원 중복 검사 메서드
     private void validateDuplicateMember(Member member){
         List<Member> findMembers = memberRepository.findByLoginId(member.getLoginId());
         if(!findMembers.isEmpty()) {

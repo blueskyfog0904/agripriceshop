@@ -3,19 +3,20 @@ package com.agriweb.agripriceshop.dto;
 import com.agriweb.agripriceshop.domain.Address;
 import com.agriweb.agripriceshop.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
+@RequiredArgsConstructor
 @ToString
 @Data
 @Builder
 @Schema(description = "Member 관련 Dto")
 public class MemberDto {
+
+    @Schema(description = "Member Id")
+    private Long id;
 
     @Schema(description = "Member loginId")
     private String loginId;
@@ -41,19 +42,6 @@ public class MemberDto {
     @Schema(description = "Member 이메일")
     private String email;
 
-    public Member toEntity() {
-        Member member = Member.builder()
-                .loginId(this.loginId)
-                .pw(this.pw)
-                .userName(this.userName)
-                .birthdate(this.birthdate)
-                .gender(this.gender)
-                .tel(this.tel)
-                .addr(this.addr)
-                .email(this.email)
-                .build();
 
-        return member;
-    }
 
 }
