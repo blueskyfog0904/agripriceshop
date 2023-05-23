@@ -1,5 +1,6 @@
 package com.agriweb.agripriceshop.domain;
 
+import com.agriweb.agripriceshop.dto.BoardDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,5 +32,15 @@ public class Board {
     private LocalDateTime deleteDate;
 
     private int viewCount;
+
+    //==생성 메서드==//
+    public static Board createBoard(BoardDto dto, Member member) {
+        Board board = new Board();
+        board.setBoardTitle(dto.getBoardTitle());
+        board.setBoardContent(dto.getBoardContent());
+        board.setMember(member);
+        board.setRegdate(LocalDateTime.now());
+        return board;
+    }
 
 }

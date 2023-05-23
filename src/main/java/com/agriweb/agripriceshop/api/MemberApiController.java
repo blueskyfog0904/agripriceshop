@@ -25,7 +25,6 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/members")
 public class MemberApiController {
 
     @Autowired
@@ -42,10 +41,10 @@ public class MemberApiController {
         // Member 엔티티 생성
         Member member = Member.createMember(dto);
         // Member 엔티티 저장(DB)
-        memberService.join(member);
+        Member created = memberService.join(member);
         // 성공시 member 객체 반환
-        return (member != null) ?
-                ResponseEntity.status(HttpStatus.OK).body(member) :
+        return (created != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(created) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

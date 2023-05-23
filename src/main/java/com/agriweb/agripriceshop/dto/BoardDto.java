@@ -1,12 +1,14 @@
 package com.agriweb.agripriceshop.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
+@RequiredArgsConstructor
 @ToString
+@Data
+@Builder
 public class BoardDto {
 
     private String boardId;
