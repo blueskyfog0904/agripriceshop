@@ -29,18 +29,16 @@ public class MemberService {
         return member;
     }
 
-    // 회원 정보 삭제
-    @Transactional
-    public Member delete(Long id) {
-        Member target = memberRepository.findOne(id);
-
-        if(target == null) {
-            return null;
-        }
-        // 삭제
-        memberRepository.deleteOne(target);
-        return target;
+    // 회원 전체 조회
+    public List<Member> findMembers() {
+        return memberRepository.findAll();
     }
+
+    // 회원 1명의 정보 조회
+    public Member findOne(Long memberId) {
+        return memberRepository.findOne(memberId);
+    }
+
 
     // 회원 정보 수정
     @Transactional
@@ -56,7 +54,7 @@ public class MemberService {
 
         // 3. 업데이트
         if (dto.getPw() != null) {
-           target.setPw(dto.getPw());
+            target.setPw(dto.getPw());
         }
         if (dto.getTel() != null) {
             target.setTel(dto.getTel());
@@ -71,6 +69,21 @@ public class MemberService {
         return target;
     }
 
+    // 회원 정보 삭제
+    @Transactional
+    public Member delete(Long id) {
+        Member target = memberRepository.findOne(id);
+
+        if(target == null) {
+            return null;
+        }
+        // 삭제
+        memberRepository.deleteOne(target);
+        return target;
+    }
+
+
+
     // 회원 중복 검사 메서드
     private void validateDuplicateMember(Member member){
         List<Member> findMembers = memberRepository.findByLoginId(member.getLoginId());
@@ -79,15 +92,6 @@ public class MemberService {
         }
     }
 
-    // 회원 전체 조회
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
-    }
-
-    // 회원 1명의 정보 조회
-    public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
-    }
 
 
 
