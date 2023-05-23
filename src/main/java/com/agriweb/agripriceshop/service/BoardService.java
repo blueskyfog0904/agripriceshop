@@ -37,6 +37,11 @@ public class BoardService {
 
     }
 
+    // 게시판Id로 게시글 조회
+    public Board findOne(Long boardId) {
+        return boardRepository.findOne(boardId);
+    }
+
     // 게시글 정보 수정
     @Transactional
     public Board update(Long id, BoardDto dto) {
@@ -60,6 +65,15 @@ public class BoardService {
         boardRepository.save(target);
         return target;
 
+    }
+
+    // 게시글 삭제
+    @Transactional
+    public void delete(Long id) {
+        Board target = boardRepository.findOne(id);
+
+        // 삭제
+        boardRepository.deleteOne(target);
     }
 
 

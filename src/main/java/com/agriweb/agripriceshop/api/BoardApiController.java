@@ -81,6 +81,24 @@ public class BoardApiController {
         Board updated = boardService.update(id, dto);
         return (updated != null) ? ResponseEntity.status(HttpStatus.OK).body(updated) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+    // 게시글 삭제 API
+    @Operation(summary = "게시글 삭제 메서드", description = "게시글 삭제 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @DeleteMapping("/api/boards/{postId}")
+    public ResponseEntity<String> delete(@PathVariable Long boardId) {
+
+        if (boardService.findOne(boardId) != null ) {
+            boardService.delete(boardId);
+            return ResponseEntity.ok("게시글이 삭제되었습니다");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 게시글입니다.");
+        }
+
+
+    }
 
 
 
