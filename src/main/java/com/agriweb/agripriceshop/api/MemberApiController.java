@@ -37,7 +37,7 @@ public class MemberApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping(value = "join")
+    @PostMapping("/api/members/join")
     public ResponseEntity<Member> createMember(@RequestBody MemberDto dto) {
         // Member 엔티티 생성
         Member member = Member.createMember(dto);
@@ -55,7 +55,7 @@ public class MemberApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping(value = "index")
+    @GetMapping("/api/members/index")
     public List<Member> index() {
         return memberService.findMembers();
     }
@@ -66,7 +66,7 @@ public class MemberApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping(value = "{id}")
+    @GetMapping("/api/members/{id}")
     public Member indexOne(@PathVariable Long id) {
         return memberService.findOne(id);
     }
@@ -77,7 +77,7 @@ public class MemberApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping(value = "{id}")
+    @PutMapping("/api/members/{id}")
     public ResponseEntity<Member> updateMember(@PathVariable Long id,
                                                @RequestBody MemberDto dto){
 
@@ -94,7 +94,7 @@ public class MemberApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping("/api/members/{id}")
     public ResponseEntity<Member> delete(@PathVariable Long id) {
 
         Member deleted = memberService.delete(id);

@@ -37,7 +37,7 @@ public class MemberRepository {
 
 
     // 로그인시 해당되는 Member class 값 가져오기
-    public Member loginByLoginId(String loginId) {
+    public Member findOneByLoginId(String loginId) {
         return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
                 .setParameter("loginId", loginId)
                 .getSingleResult();

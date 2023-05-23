@@ -34,9 +34,15 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    // 회원 1명의 정보 조회
+    // 회원 1명의 정보 조회(id)
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
+    }
+
+    // 회원 1명의 정보 조회(loginId)
+    @Transactional
+    public Member findOnebyLoginId(String loginId) {
+        return memberRepository.findOneByLoginId(loginId);
     }
 
 

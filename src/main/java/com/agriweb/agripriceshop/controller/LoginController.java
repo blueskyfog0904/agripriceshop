@@ -22,12 +22,6 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String loginId(@ModelAttribute Member member) {
-        if(loginService.login(member)) {
-            return "redirect:/";
-        }
-        return "login";
-    }
+
 
 }
