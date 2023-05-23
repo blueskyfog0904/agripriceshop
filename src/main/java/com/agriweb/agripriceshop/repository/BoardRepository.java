@@ -33,6 +33,11 @@ public class BoardRepository {
                 .getResultList();
     }
 
+    // 게시글 수정시 게시글 조회
+    public Board findOne(Long id) {
+        return em.find(Board.class, id);
+    }
+
     // 게시글 삭제
     public void deleteOne(Board board) {
         em.remove(board);

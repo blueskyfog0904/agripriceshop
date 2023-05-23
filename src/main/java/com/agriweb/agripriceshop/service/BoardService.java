@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,6 +34,31 @@ public class BoardService {
     // loginId로 게시글 조회
     public List<Board> findByLoginId(String loginId){
         return boardRepository.findByloginId(loginId);
+
+    }
+
+    // 게시글 정보 수정
+    @Transactional
+    public Board update(Long id, BoardDto dto) {
+
+        // 1. 대상 엔티티 찾기
+        Board target = boardRepository.findOne(id);
+
+        // 2. 잘못된 요청 처리
+        if (target == null || target.getId() != id) {
+            return null;
+        }
+
+        // 3. 업데이트
+        if (dto.getBoardTitle() != null) {
+            target.setBoardTitle(dto.getBoardTitle());
+        }
+        if (dto.getBoardContent() != null){
+            target.setBoardContent(dto.getBoardContent());
+        }
+        target.setUpdate(LocalDateTime.now());
+        boardRepository.save(target);
+        return target;
 
     }
 
