@@ -15,7 +15,9 @@ public class Comment {
 
     private String cmContent;
 
-    private Long boardId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="board_id")
+    private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
