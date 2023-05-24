@@ -2,6 +2,7 @@ package com.agriweb.agripriceshop.repository;
 
 import com.agriweb.agripriceshop.domain.Member;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -38,9 +39,13 @@ public class MemberRepository {
 
     // 로그인시 해당되는 Member class 값 가져오기
     public Member findOneByLoginId(String loginId) {
-        return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
-                .setParameter("loginId", loginId)
-                .getSingleResult();
+        try {
+            return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
+                    .setParameter("loginId", loginId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 }
