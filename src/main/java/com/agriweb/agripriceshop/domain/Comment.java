@@ -2,15 +2,14 @@ package com.agriweb.agripriceshop.domain;
 
 import com.agriweb.agripriceshop.dto.CommentDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Comment {
     @Id @GeneratedValue
     @Column(name="comment_id")

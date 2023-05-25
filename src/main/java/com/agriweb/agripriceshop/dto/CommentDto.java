@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Data
 @ToString
 public class CommentDto {
