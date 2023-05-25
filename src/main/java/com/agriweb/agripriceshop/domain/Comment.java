@@ -44,5 +44,18 @@ public class Comment {
         return new Comment(dto.getId(), dto.getCmContent(), board, member, LocalDateTime.now(), null, null);
     }
 
+    // Comment 수정
+    public void patch(CommentDto dto) {
+        // 예외발생
+        if(this.id != dto.getId()) throw new IllegalArgumentException("댓글 수정 실패. 잘못된 ID 입니다.");
+
+        // 객체를 갱신
+        if (dto.getCmContent() != null) {
+            this.cmContent = dto.getCmContent();
+        }
+        this.regdate = LocalDateTime.now();
+
+    }
+
 
 }

@@ -9,13 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "댓글", description = "댓글 관련 api 입니다")
 @RestController
@@ -42,5 +42,44 @@ public class CommentApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
     }
+    // 게시글에 대한 댓글 가져오기 API
+    @Operation(summary = "게시글 댓글 가져오기 메서드", description = "게시글 댓글 가져오기 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @GetMapping("/api/boards/{boardId}/commetns")
+    public ResponseEntity<List<CommentDto>> comments(@PathVariable Long boardId) {
+        List<CommentDto> dtos = commentService.comments(boardId);
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+    }
+
+    // 댓글 수정 API
+    @Operation(summary = "댓글 수정 메서드", description = "댓글 수정 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @PutMapping("/api/comments/{commentId}")
+    public ResponseEntity<CommentDto> update(@PathVariable Long commentId, @RequestBody CommentDto dto) {
+        CommentDto updateDto = commentService.update(commentId, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(updateDto);
+
+    }
+
+    // 댓글 삭제 API
+    @Operation(summary = "댓글 삭제 메서드", description = "댓글 삭제 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @DeleteMapping("/api/comments/{commentId}")
+    public ResponseEntity<CommentDto> delete(@PathVariable Long commentId) {
+
+        CommentDto deleteDto = commentService.delete(commentId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
+    }
+
 
 }
