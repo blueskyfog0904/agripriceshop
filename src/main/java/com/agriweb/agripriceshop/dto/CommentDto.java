@@ -20,7 +20,7 @@ public class CommentDto {
 
     public static CommentDto createCommentDto(Comment c) {
         return new CommentDto(c.getId(), c.getCmContent(), c.getBoard().getId(), c.getMember().getId()
-                , c.getRegdate(), null, null);
+                , c.getRegdate(), c.getUpdate(), c.getDeleteDate());
     }
 
 }

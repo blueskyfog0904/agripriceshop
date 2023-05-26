@@ -38,12 +38,13 @@ public class BoardApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/api/boards")
-    public ResponseEntity<Board> create(@RequestBody BoardDto dto, String loginId) {
+    public ResponseEntity<BoardDto> create(@RequestBody BoardDto dto, String loginId) {
         Member member = memberService.findOnebyLoginId(loginId);
         Board board = Board.createBoard(dto, member);
         Board created = boardService.create(board);
-        return (created != null) ?
-                ResponseEntity.status(HttpStatus.OK).body(created) :
+        BoardDto createdDto = BoardDto.createBoardDto(created);
+        return (createdDto != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createdDto) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
     }
@@ -77,10 +78,15 @@ public class BoardApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PutMapping("/api/boards/{id}")
-    public ResponseEntity<Board> updateBoard(@PathVariable Long id, @RequestBody BoardDto dto) {
+    public ResponseEntity<BoardDto> updateBoard(@PathVariable Long id, @RequestBody BoardDto dto) {
         Board updated = boardService.update(id, dto);
-        return (updated != null) ? ResponseEntity.status(HttpStatus.OK).body(updated) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        BoardDto updatedDto = BoardDto.createBoardDto(updated);
+        return (updatedDto != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(updatedDto) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+
     // 게시글 삭제 API
     @Operation(summary = "게시글 삭제 메서드", description = "게시글 삭제 메서드입니다.")
     @ApiResponses(value = {

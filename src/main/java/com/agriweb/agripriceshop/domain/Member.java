@@ -49,6 +49,7 @@ public class Member {
     //== 생성 메서드==//
     public static Member createMember(MemberDto dto){
         Member member = new Member();
+        member.setId(dto.getId());
         member.setLoginId(dto.getLoginId());
         member.setPw(dto.getPw());
         member.setUserName(dto.getUserName());

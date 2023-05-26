@@ -46,7 +46,7 @@ public class CommentService {
         commentRepository.save(comment);
         Comment created = commentRepository.findOne(comment.getId());
 
-        // DTO로 변경한여 반환
+        // DTO로 변경하여 반환
         return CommentDto.createCommentDto(created);
 
     }

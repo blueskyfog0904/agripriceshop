@@ -42,6 +42,11 @@ public class MemberDto {
     @Schema(description = "Member 이메일")
     private String email;
 
+    //== 생성 메서드==//
+    public static MemberDto createMemberDto(Member member) {
+        return new MemberDto(member.getId(), member.getLoginId(), member.getPw(), member.getUserName(), member.getBirthdate(), member.getGender(), member.getTel(), member.getAddr(), member.getEmail());
+    }
+
 
 
 }

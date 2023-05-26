@@ -71,4 +71,104 @@ public class CommentServiceTest {
 
     }
 
+    @Test
+    public void 댓글_수정()throws Exception {
+        // given
+        MemberDto dto = new MemberDto();
+        dto.setUserName("kim");
+        dto.setPw("1234");
+        dto.setLoginId("kim1234");
+        dto.setBirthdate(LocalDate.ofEpochDay(19850904));
+        dto.setGender("남");
+        dto.setEmail("kim1234@naver.com");
+        dto.setTel("01012341234");
+        Member member = Member.createMember(dto);
+        Member member2 = memberService.join(member);
+
+        BoardDto bDto = new BoardDto();
+        bDto.setBoardTitle("게시글 제목");
+        bDto.setBoardContent("게시글 내용");
+        bDto.setMemberId(dto.getId());
+        bDto.setRegdate(LocalDateTime.now());
+        Board board = Board.createBoard(bDto, member2);
+        Board board2 = boardService.create(board);
+
+        CommentDto cDto = new CommentDto();
+        cDto.setCmContent("댓글 내용입니다.");
+        cDto.setBoardId(board2.getId());
+        cDto.setMemberId(member2.getId());
+        cDto.setRegdate(LocalDateTime.now());
+
+        CommentDto create = commentService.create(cDto.getBoardId(), member2.getLoginId(), cDto);
+        Comment find = commentRepository.findOne(create.getId());
+
+        CommentDto revisedDto = CommentDto.createCommentDto(find);
+        revisedDto.setCmContent("댓글을 수정하였습니다.");
+        revisedDto.setUpdate(LocalDateTime.now());
+
+        // when
+        CommentDto revised = commentService.update(revisedDto.getId(), revisedDto);
+        Comment revisedComment = commentRepository.findOne(revised.getId());
+
+        // then
+        Assertions.assertEquals(revised, CommentDto.createCommentDto(revisedComment));
+
+    }
+
+    @Test
+    public void 댓글_삭제() throws Exception {
+        // given
+        MemberDto dto = new MemberDto();
+        dto.setUserName("kim");
+        dto.setPw("1234");
+        dto.setLoginId("kim1234");
+        dto.setBirthdate(LocalDate.ofEpochDay(19850904));
+        dto.setGender("남");
+        dto.setEmail("kim1234@naver.com");
+        dto.setTel("01012341234");
+        Member member = Member.createMember(dto);
+        Member member2 = memberService.join(member);
+
+        BoardDto bDto = new BoardDto();
+        bDto.setBoardTitle("게시글 제목");
+        bDto.setBoardContent("게시글 내용");
+        bDto.setMemberId(dto.getId());
+        bDto.setRegdate(LocalDateTime.now());
+        Board board = Board.createBoard(bDto, member2);
+        Board board2 = boardService.create(board);
+
+        CommentDto cDto = new CommentDto();
+        cDto.setCmContent("댓글 내용입니다.");
+        cDto.setBoardId(board2.getId());
+        cDto.setMemberId(member2.getId());
+        cDto.setRegdate(LocalDateTime.now());
+
+        CommentDto create = commentService.create(cDto.getBoardId(), member2.getLoginId(), cDto);
+
+        // when
+        commentService.delete(create.getId());
+
+        // then
+        Assertions.assertEquals(null, commentRepository.findOne(create.getId()));
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

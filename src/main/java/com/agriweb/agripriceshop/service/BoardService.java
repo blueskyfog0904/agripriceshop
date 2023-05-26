@@ -23,7 +23,8 @@ public class BoardService {
     @Transactional
     public Board create(Board board) {
         boardRepository.save(board);
-        return board;
+        Board created = boardRepository.findOne(board.getId());
+        return created;
     }
 
     // 게시글 전체 조회
@@ -63,7 +64,8 @@ public class BoardService {
         }
         target.setUpdate(LocalDateTime.now());
         boardRepository.save(target);
-        return target;
+        Board updated = boardRepository.findOne(target.getId());
+        return updated;
 
     }
 
