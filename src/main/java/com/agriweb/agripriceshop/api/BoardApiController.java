@@ -39,10 +39,12 @@ public class BoardApiController {
     })
     @PostMapping("/api/boards")
     public ResponseEntity<BoardDto> create(@RequestBody BoardDto dto, String loginId) {
-        Member member = memberService.findOnebyLoginId(loginId);
+//        Member member = memberService.findOnebyLoginId(loginId);
+//         하기 주석 코드는 테스트를 위해서 사용한 코드, 전체 테스트 후 이상 없으면 삭제할 예정(5/29)
+        Member member = memberService.findOnebyLoginId(dto.getLoginId());
         Board board = Board.createBoard(dto, member);
         Board created = boardService.create(board);
-        BoardDto createdDto = BoardDto.createBoardDto(created);
+        BoardDto createdDto = BoardDto.createBoardDto(created, member);
         return (createdDto != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(createdDto) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -80,7 +82,7 @@ public class BoardApiController {
     @PutMapping("/api/boards/{id}")
     public ResponseEntity<BoardDto> updateBoard(@PathVariable Long id, @RequestBody BoardDto dto) {
         Board updated = boardService.update(id, dto);
-        BoardDto updatedDto = BoardDto.createBoardDto(updated);
+        BoardDto updatedDto = BoardDto.updateBoardDto(updated);
         return (updatedDto != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(updatedDto) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

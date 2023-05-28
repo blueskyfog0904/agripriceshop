@@ -39,13 +39,18 @@ public class MemberRepository {
 
     // 로그인시 해당되는 Member class 값 가져오기
     public Member findOneByLoginId(String loginId) {
-        try {
-            return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
-                    .setParameter("loginId", loginId)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+//        try {
+//            return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
+//                    .setParameter("loginId", loginId)
+//                    .getSingleResult();
+//        } catch (NoResultException e) {
+//            return null;
+//        }
+         Member result = em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
+                .setParameter("loginId", loginId)
+                .getSingleResult();
+        System.out.println(result);
+        return result;
     }
 
 }

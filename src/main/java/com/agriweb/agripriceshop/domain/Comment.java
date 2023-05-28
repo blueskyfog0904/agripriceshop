@@ -38,6 +38,7 @@ public class Comment {
             throw new IllegalArgumentException("댓글 생성 실패! 댓글의 id가 없어야 합니다.");
         if (dto.getBoardId() != board.getId())
             throw new IllegalArgumentException("댓글 생성 실패! 게시글의 id가 잘못되었습니다.");
+        dto.setRegdate(LocalDateTime.now());
 
         // 엔티티 생성 및 반환
         return new Comment(dto.getId(), dto.getCmContent(), board, member, dto.getRegdate(), dto.getUpdate(), dto.getDeleteDate());

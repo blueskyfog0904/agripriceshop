@@ -1,6 +1,7 @@
 package com.agriweb.agripriceshop.domain;
 
 import com.agriweb.agripriceshop.dto.BoardDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class Board {
     @Column(length = 5000)
     private String boardContent;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -42,5 +44,6 @@ public class Board {
         board.setRegdate(LocalDateTime.now());
         return board;
     }
+
 
 }

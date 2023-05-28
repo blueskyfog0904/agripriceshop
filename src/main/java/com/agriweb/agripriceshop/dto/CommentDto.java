@@ -14,12 +14,13 @@ public class CommentDto {
     private String cmContent;
     private Long boardId;
     private Long memberId;
+    private String loginId;
     private LocalDateTime regdate;
     private LocalDateTime update;
     private LocalDateTime deleteDate;
 
     public static CommentDto createCommentDto(Comment c) {
-        return new CommentDto(c.getId(), c.getCmContent(), c.getBoard().getId(), c.getMember().getId()
+        return new CommentDto(c.getId(), c.getCmContent(), c.getBoard().getId(), c.getMember().getId(), c.getMember().getLoginId()
                 , c.getRegdate(), c.getUpdate(), c.getDeleteDate());
     }
 

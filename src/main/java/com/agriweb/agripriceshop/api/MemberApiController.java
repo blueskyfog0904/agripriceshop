@@ -37,14 +37,15 @@ public class MemberApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/api/members/join")
-    public ResponseEntity<Member> createMember(@RequestBody MemberDto dto) {
+    public ResponseEntity<MemberDto> createMember(@RequestBody MemberDto dto) {
         // Member 엔티티 생성
         Member member = Member.createMember(dto);
         // Member 엔티티 저장(DB)
         Member created = memberService.join(member);
+        MemberDto createdDto = MemberDto.createMemberDto(created);
         // 성공시 member 객체 반환
-        return (created != null) ?
-                ResponseEntity.status(HttpStatus.OK).body(created) :
+        return (createdDto != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createdDto) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

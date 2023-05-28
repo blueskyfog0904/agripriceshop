@@ -17,6 +17,12 @@ springdoc:
   paths-to-match:
     - /**
 
+
+#jwt:
+#  secretKey: 54185747e7e05d14adc60c52ef154cb5a76db1073321b08a587b8532fd3122c62a99ec7440ab9c62d13a9a1
+#  refreshKey: 14585747e7e05d14adc60c52ef154cb5a76db1073321b08a587b8532fd3122c62a99ec7440ab9c62d13a9a1
+
+
 spring:
   datasource:
     url: jdbc:h2:tcp://localhost/~/agripriceshop
