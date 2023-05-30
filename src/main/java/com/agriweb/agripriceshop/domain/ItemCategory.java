@@ -1,5 +1,5 @@
 package com.agriweb.agripriceshop.domain;
 
 public enum ItemCategory {
-    FRUIT, VEGETABLE, FOODSTUFF
+    FRUIT, VEGETABLE, FOODSTUFF, ETC
 }
