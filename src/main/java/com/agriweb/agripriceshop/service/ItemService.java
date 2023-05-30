@@ -17,8 +17,16 @@ public class ItemService {
     @Autowired
     private final ItemRepository itemRepository;
 
+    // 아이템(상품) 등록
     @Transactional
-    public void saveItem(Item item) {
+    public Item saveItem(Item item) {
         itemRepository.save(item);
+        Item created = itemRepository.findOne(item.getId());
+        return created;
     }
+
+    public Item findOne(Long itemId) {
+        return itemRepository.findOne(itemId);
+    }
+
 }

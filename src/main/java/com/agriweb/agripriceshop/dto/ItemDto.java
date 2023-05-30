@@ -1,5 +1,8 @@
 package com.agriweb.agripriceshop.dto;
 
+import com.agriweb.agripriceshop.domain.ItemCategory;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,7 +23,8 @@ public class ItemDto {
 
     private int stockQuantity;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private ItemCategory itemCategory;
 
     private String loginId;
 
