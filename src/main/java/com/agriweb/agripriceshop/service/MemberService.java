@@ -77,15 +77,11 @@ public class MemberService {
 
     // 회원 정보 삭제
     @Transactional
-    public Member delete(Long id) {
+    public void delete(Long id) {
         Member target = memberRepository.findOne(id);
 
-        if(target == null) {
-            return null;
-        }
         // 삭제
         memberRepository.deleteOne(target);
-        return target;
     }
 
 

@@ -95,11 +95,15 @@ public class MemberApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @DeleteMapping("/api/members/{id}")
-    public ResponseEntity<Member> delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
 
-        Member deleted = memberService.delete(id);
-        return (deleted != null)? ResponseEntity.status(HttpStatus.OK).body(deleted):
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        Member target = memberService.findOne(id);
+        String loginId = target.getLoginId();
+        memberService.delete(id);
+        Member delete = memberService.findOne(id);
+
+        return (delete == null) ? ResponseEntity.ok(loginId + " 회원정보가 삭제되었습니다.") :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원정보 삭제에 실패하였습니다.");
 
     }
 

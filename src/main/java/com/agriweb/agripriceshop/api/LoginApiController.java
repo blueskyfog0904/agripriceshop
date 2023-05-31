@@ -43,7 +43,7 @@ public class LoginApiController {
 
         // dto로 전송된 ID, PW 비교하기
         // 일치하면 login 성공, 불일치하면 비성공
-        if (login.getId().equals(dto.getLoginId()) && login.getPw().equals(dto.getPw())) {
+        if (login.getLoginId().equals(dto.getLoginId()) && login.getPw().equals(dto.getPw())) {
             return ResponseEntity.status(HttpStatus.OK).body(login);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
