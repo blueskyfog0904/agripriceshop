@@ -33,18 +33,21 @@ public class ItemApiController {
     private final MemberService memberService;
 
     //     아이템(상품) 등록 API
-//    @Operation(summary = "아이템(상품) 등록 메서드", description = "아이템(상품) 등록 메서드입니다.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "successful operation"),
-//            @ApiResponse(responseCode = "400", description = "bad request operation")
-//    })
-//    @PostMapping("/api/items")
-//    public ResponseEntity<ItemDto> create(@RequestBody ItemDto dto, String loginId) {
-//        Member loginMember = memberService.findOnebyLoginId(loginId);
-//        dto.setRegdate(LocalDateTime.now());
-//        Item target = Item.createItem(dto, loginMember);
-//
-//    }
+    @Operation(summary = "아이템(상품) 등록 메서드", description = "아이템(상품) 등록 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @PostMapping("/api/items")
+    public ResponseEntity<ItemDto> create(@RequestBody ItemDto dto, String loginId) {
+        Member loginMember = memberService.findOnebyLoginId(loginId);
+        dto.setRegdate(LocalDateTime.now());
+        Item target = Item.createItem(dto, loginMember);
+        Item saved = itemService.create(target);
+        ItemDto created = ItemDto.createItemDto(saved, loginId);
+
+
+    }
 
 
 }
