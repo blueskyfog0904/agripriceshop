@@ -74,11 +74,11 @@ public class ItemApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @DeleteMapping("/api/items/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long itemId) {
-        Item target = itemService.findOnebyId(itemId);
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        Item target = itemService.findOnebyId(id);
         String name = target.getName();
         if (target != null) {
-            itemService.delete(itemId);
+            itemService.delete(id);
             return ResponseEntity.ok(name + " 상품이 삭제되었습니다.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 상품입니다.");
