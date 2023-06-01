@@ -31,4 +31,9 @@ public class ItemRepository {
                 .getResultList();
     }
 
+    // 아이템(상품) 삭제
+    public void deleteOne(Item item) {
+        em.remove(item);
+    }
+
 }
