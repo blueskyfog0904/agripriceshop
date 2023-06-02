@@ -1,6 +1,7 @@
 package com.agriweb.agripriceshop.service;
 
 import com.agriweb.agripriceshop.domain.Item;
+import com.agriweb.agripriceshop.domain.ItemCategory;
 import com.agriweb.agripriceshop.domain.Member;
 import com.agriweb.agripriceshop.dto.ItemDto;
 import com.agriweb.agripriceshop.repository.ItemRepository;
@@ -57,6 +58,45 @@ public class ItemService {
         return dtos;
 
     }
+
+    // 아이템(상품) 카테고리로 조회
+    public List<ItemDto> findItemsByCategory(ItemCategory itemCategory) {
+        // 조회 : 아이템(상품) 카테고리로 조회
+        List<Item> items = itemRepository.findByCategory(itemCategory);
+
+
+        // 변환 엔티티 -> Dto
+        List<ItemDto> dtos = new ArrayList<ItemDto>();
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            Member member = memberRepository.findOne(item.getRegister().getId());
+            String loginId = member.getLoginId();
+            ItemDto dto = ItemDto.createItemDto(item, loginId);
+            dtos.add(dto);
+
+        }
+        return dtos;
+    }
+
+    // 아이템(상품) 이름 검색으로 조회
+    public List<ItemDto> findItemsByName(String findName) {
+        // 조회 : 아이템(상품) 이름 검색으로 조회
+        List<Item> items = itemRepository.findByName(findName);
+회
+        // 변환 엔티티 -> Dto
+        List<ItemDto> dtos = new ArrayList<ItemDto>();
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            Member member = memberRepository.findOne(item.getRegister().getId());
+            String loginId = member.getLoginId();
+            ItemDto dto = ItemDto.createItemDto(item, loginId);
+            dtos.add(dto);
+
+        }
+        return dtos;
+
+    }
+
 
     // 아이템 삭제
     @Transactional

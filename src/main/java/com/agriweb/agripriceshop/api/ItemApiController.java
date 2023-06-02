@@ -2,6 +2,7 @@ package com.agriweb.agripriceshop.api;
 
 
 import com.agriweb.agripriceshop.domain.Item;
+import com.agriweb.agripriceshop.domain.ItemCategory;
 import com.agriweb.agripriceshop.domain.Member;
 import com.agriweb.agripriceshop.dto.ItemDto;
 import com.agriweb.agripriceshop.service.ItemService;
@@ -66,6 +67,31 @@ public class ItemApiController {
     public List<ItemDto> index() {
         return itemService.findItems();
     }
+
+    // 아이템(상품) 카테고리로 조회 API
+    @Operation(summary = "아이템(상품) 카테고리로 조회 메서드", description = "아이템(상품) 카테고리로 조회 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @GetMapping("/api/items/category")
+    public List<ItemDto> indexByCategory(@RequestParam ItemCategory itemCategory) {
+        return itemService.findItemsByCategory(itemCategory);
+
+    }
+
+    // 아이템(상품) 상품이름 검색으로 조회 API
+    @Operation(summary = "아이템(상품) 상품이름 검색으로 조회 메서드", description = "아이템(상품) 상품이름 검색으로 조회 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @GetMapping("/api/items/findname")
+    public List<ItemDto> indexByCategory(@RequestParam String findName) {
+        return itemService.findItemsByName(findName);
+    }
+
+
 
     // 아이템(상품) 삭제 API
     @Operation(summary = "아이템(상품) 삭제 메서드", description = "아이템(상품) 삭제 메서드입니다.")
