@@ -35,6 +35,31 @@ public class ItemService {
 
     }
 
+    // 아이템(상품) 수정
+    public ItemDto update(Long itemId, ItemDto dto) {
+        Item findItem = itemRepository.findOne(itemId);
+        if (dto.getName() != null) {
+            findItem.setName(dto.getName());
+        }
+        if (dto.getDesc() != null) {
+            findItem.setDesc(dto.getDesc());
+        }
+        if (dto.getPrice() != 0) {
+            findItem.setPrice(dto.getPrice());
+        }
+        if (dto.getStockQuantity() != 0) {
+            findItem.setStockQuantity(dto.getStockQuantity());
+        }
+        if (dto.getCategory() != null) {
+            findItem.setItemCategory(dto.getCategory());
+        }
+        String loginId = findItem.getRegister().getLoginId();
+
+        ItemDto updated = ItemDto.createItemDto(findItem, loginId);
+        return updated;
+
+    }
+
     // 아이템(상품) ID로 1개 조회
     public Item findOnebyId(Long itemId) {
         return itemRepository.findOne(itemId);

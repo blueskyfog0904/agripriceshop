@@ -57,6 +57,23 @@ public class ItemApiController {
 
     }
 
+    // 아이템(상품) 수정 API
+    @Operation(summary = "아이템(상품) 수정 메서드", description = "아이템(상품) 수정 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @PostMapping("/api/items/{itemId}")
+    public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody ItemDto dto) {
+        //ItemDto에 Update에 현재시간 입력
+        dto.setUpdate(LocalDateTime.now());
+        // 수정하려는 아이템 업데이트하기
+        ItemDto updatedDto = itemService.update(itemId, dto);
+        return (updatedDto != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(updatedDto) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     //     아이템(상품) 전체 조회 API
     @Operation(summary = "아이템(상품) 전체 조회 메서드", description = "아이템(상품) 전체 조회 메서드입니다.")
     @ApiResponses(value = {
@@ -90,6 +107,8 @@ public class ItemApiController {
     public List<ItemDto> indexByCategory(@RequestParam String findName) {
         return itemService.findItemsByName(findName);
     }
+
+
 
 
 
