@@ -82,7 +82,7 @@ public class ItemService {
     public List<ItemDto> findItemsByName(String findName) {
         // 조회 : 아이템(상품) 이름 검색으로 조회
         List<Item> items = itemRepository.findByName(findName);
-회
+
         // 변환 엔티티 -> Dto
         List<ItemDto> dtos = new ArrayList<ItemDto>();
         for (int i = 0; i < items.size(); i++) {
