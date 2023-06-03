@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -33,6 +34,7 @@ public class Board {
 
     private LocalDateTime deleteDate;
 
+    @ColumnDefault("0")
     private int viewCount;
 
     //==생성 메서드==//

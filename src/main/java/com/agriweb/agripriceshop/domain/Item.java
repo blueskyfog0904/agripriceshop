@@ -1,9 +1,11 @@
 package com.agriweb.agripriceshop.domain;
 
 import com.agriweb.agripriceshop.dto.ItemDto;
+import com.agriweb.agripriceshop.exception.NotEnoughStockException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -19,8 +21,10 @@ public class Item {
 
     private String desc;
 
+    @ColumnDefault("0")
     private int price;
 
+    @ColumnDefault("0")
     private int stockQuantity;
 
     private ItemCategory itemCategory;
@@ -33,8 +37,10 @@ public class Item {
 
     private LocalDateTime update;
 
+    @ColumnDefault("0")
     private int viewCount;
 
+    @ColumnDefault("0")
     private int orderCount;
 
     //== 생성 메서드==/
@@ -47,9 +53,26 @@ public class Item {
         item.setItemCategory(dto.getCategory());
         item.setRegister(loginMember);
         item.setRegdate(dto.getRegdate());
-        item.setViewCount(0);
-        item.setOrderCount(0);
         return item;
+    }
+
+    //== 비즈니스 로직==//
+    /**
+     * stock 증가
+     */
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+
+    /**
+     * stock 감소
+     */
+    public void removeStock(int quantity) {
+        int restStock = this.stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("재고가 부족합니다.");
+        }
+        this.stockQuantity = restStock;
     }
 
 

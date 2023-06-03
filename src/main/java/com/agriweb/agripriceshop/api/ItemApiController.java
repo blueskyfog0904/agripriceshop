@@ -63,7 +63,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/items/{itemId}")
+    @PutMapping("/api/items/{itemId}")
     public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody ItemDto dto) {
         //ItemDto에 Update에 현재시간 입력
         dto.setUpdate(LocalDateTime.now());

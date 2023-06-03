@@ -53,6 +53,10 @@ public class ItemService {
         if (dto.getCategory() != null) {
             findItem.setItemCategory(dto.getCategory());
         }
+        if (dto.getUpdate() != null) {
+            findItem.setUpdate(dto.getUpdate());
+        }
+
         String loginId = findItem.getRegister().getLoginId();
 
         ItemDto updated = ItemDto.createItemDto(findItem, loginId);
