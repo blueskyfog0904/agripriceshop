@@ -1,5 +1,9 @@
 server:
   port: 8080
+  servlet:
+    session:
+      cookie:
+        max-age: 172800
 
 springdoc:
   default-consumes-media-type: application/json
@@ -28,8 +32,8 @@ spring:
     url: jdbc:h2:tcp://localhost/~/agripriceshop
     username: sa
     driver-class-name: org.h2.Driver
-    initialization-mode: always
-    data: classpath:data.sql
+#    initialization-mode: always
+#    data: classpath:data.sql
   jpa:
     hibernate:
       ddl-auto: create
@@ -37,8 +41,17 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+#  sql:
+#    init.mode: always
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
+  session:
+    store-type: jdbc
+    jdbc.initialize-schema: always
+    timeout: 86400
 
+
+hodolman:
+  jwt-key: "9jkjlAnkk981345hAJJBjdjbbbbpqk2"
 

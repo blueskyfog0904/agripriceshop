@@ -12,14 +12,14 @@ import java.util.List;
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="member_id")
     private Long id;
 
     @Column(unique = true, length = 30)
     private String loginId;
 
-    @Column(length = 50)
+    @Column(length = 400)
     private String pw;
 
     @Column(length = 10)
