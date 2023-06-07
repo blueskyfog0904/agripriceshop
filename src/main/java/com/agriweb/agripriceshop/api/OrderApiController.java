@@ -32,7 +32,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/order")
+    @PostMapping("/user/order")
     public ResponseEntity<String> order(@RequestParam("memberId") Long memberId,
                                 @RequestParam("itemId") Long itemId,
                                 @RequestParam("count") int count) {
@@ -46,7 +46,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/orders")
+    @GetMapping("/user/orders")
     public List<Order> orderList(@RequestParam OrderSearch orderSearch) {
         return orderService.findOrders(orderSearch);
 
@@ -56,7 +56,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/orders/{orderId}/cancel")
+    @PostMapping("/user/orders/{orderId}/cancel")
     public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId ) {
         orderService.cancelOrder((orderId));
         Order deleted = orderService.findOne(orderId);

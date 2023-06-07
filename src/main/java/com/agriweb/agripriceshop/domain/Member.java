@@ -58,7 +58,7 @@ public class Member implements UserDetails {
 
 
     @Column
-    private String role;
+    private String role; // 역할상태 [USER, ADMIN]
 
 
 
@@ -110,6 +110,7 @@ public class Member implements UserDetails {
         member.setTel(dto.getTel());
         member.setAddr(dto.getAddr());
         member.setEmail(dto.getEmail());
+        member.setRole(dto.getRole());
 
 
         return member;

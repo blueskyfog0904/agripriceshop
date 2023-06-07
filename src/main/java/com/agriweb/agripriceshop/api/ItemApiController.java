@@ -39,7 +39,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/items")
+    @PostMapping("/admin/items")
     public ResponseEntity<ItemDto> create(@RequestBody ItemDto dto, String loginId) {
         // loginId를 이용해서 Member 정보 가져오기
         Member loginMember = memberService.findOnebyLoginId(loginId);
@@ -63,7 +63,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping("/api/items/{itemId}")
+    @PutMapping("/admin/items/{itemId}")
     public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody ItemDto dto) {
         //ItemDto에 Update에 현재시간 입력
         dto.setUpdate(LocalDateTime.now());
@@ -118,7 +118,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/api/items/{id}")
+    @DeleteMapping("/admin/items/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         Item target = itemService.findOnebyId(id);
         String name = target.getName();

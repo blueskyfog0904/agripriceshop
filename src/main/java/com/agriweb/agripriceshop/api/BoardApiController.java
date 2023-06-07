@@ -37,7 +37,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/boards")
+    @PostMapping("/user/boards")
     public ResponseEntity<BoardDto> create(@RequestBody BoardDto dto, String loginId) {
 //        Member member = memberService.findOnebyLoginId(loginId);
 //         하기 주석 코드는 테스트를 위해서 사용한 코드, 전체 테스트 후 이상 없으면 삭제할 예정(5/29)
@@ -79,7 +79,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping("/api/boards/{id}")
+    @PutMapping("/user/boards/{id}")
     public ResponseEntity<BoardDto> updateBoard(@PathVariable Long id, @RequestBody BoardDto dto) {
         Board updated = boardService.update(id, dto);
         BoardDto updatedDto = BoardDto.updateBoardDto(updated);
@@ -95,7 +95,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/api/boards/{postId}")
+    @DeleteMapping("/user/boards/{postId}")
     public ResponseEntity<String> delete(@PathVariable Long boardId) {
 
         if (boardService.findOne(boardId) != null ) {

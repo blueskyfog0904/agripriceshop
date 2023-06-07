@@ -32,7 +32,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/boards/{boardId}/comments")
+    @PostMapping("/user/boards/{boardId}/comments")
     public ResponseEntity<CommentDto> create(@PathVariable Long boardId, @RequestBody CommentDto dto
                                              ) {
         // @RequestBody 에 LoginRequest 로 loginId param으로 줘야되는데 테스트 중 에러로 인해 일단 빼고 진행 중
@@ -62,7 +62,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping("/api/comments/{commentId}")
+    @PutMapping("/user/comments/{commentId}")
     public ResponseEntity<CommentDto> update(@PathVariable Long commentId, @RequestBody CommentDto dto) {
         CommentDto updateDto = commentService.update(commentId, dto);
         return ResponseEntity.status(HttpStatus.OK).body(updateDto);
@@ -75,7 +75,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/api/comments/{commentId}")
+    @DeleteMapping("/user/comments/{commentId}")
     public ResponseEntity<CommentDto> delete(@PathVariable Long commentId) {
 
         CommentDto deleteDto = commentService.delete(commentId);
