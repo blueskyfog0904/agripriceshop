@@ -22,8 +22,8 @@ springdoc:
     - /**
 
 
-#jwt:
-#  secretKey: 54185747e7e05d14adc60c52ef154cb5a76db1073321b08a587b8532fd3122c62a99ec7440ab9c62d13a9a1
+jwt:
+  secret: 54185747e7e05d14adc60c52ef154cb5a76db1073321b08a587b8532fd3122c62a99ec7440ab9c62d13a9a1
 #  refreshKey: 14585747e7e05d14adc60c52ef154cb5a76db1073321b08a587b8532fd3122c62a99ec7440ab9c62d13a9a1
 
 
@@ -46,12 +46,4 @@ spring:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
-  session:
-    store-type: jdbc
-    jdbc.initialize-schema: always
-    timeout: 86400
-
-
-hodolman:
-  jwt-key: "9jkjlAnkk981345hAJJBjdjbbbbpqk2"
 
