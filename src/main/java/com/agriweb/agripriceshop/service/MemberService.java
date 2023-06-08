@@ -71,13 +71,13 @@ public class MemberService {
 
     // 회원 정보 수정
     @Transactional
-    public Member update(Long id, MemberDto dto) {
+    public Member update(String loginId, MemberDto dto) {
 
         // 1. 대상 엔티티 찾기
-        Member target = memberRepository.findOne(id);
+        Member target = memberRepository.findOneByLoginId(loginId);
 
         // 2. 잘못된 요청 처리
-        if(target == null || target.getId() != id) {
+        if(target == null || target.getLoginId() != loginId) {
             return null;
         }
 

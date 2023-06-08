@@ -93,7 +93,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/items/category")
+    @PostMapping("/api/items/category")
     public List<ItemDto> indexByCategory(@RequestParam ItemCategory itemCategory) {
         return itemService.findItemsByCategory(itemCategory);
 
@@ -105,7 +105,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/items/findname")
+    @PostMapping("/api/items/findname")
     public List<ItemDto> indexByCategory(@RequestParam String findName) {
         return itemService.findItemsByName(findName);
     }

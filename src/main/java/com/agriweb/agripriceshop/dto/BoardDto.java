@@ -32,17 +32,22 @@ public class BoardDto {
         boardDto.setMemberId(member.getId());
         boardDto.setLoginId(member.getLoginId());
         boardDto.setBoardContent(board.getBoardContent());
-        boardDto.setRegdate(LocalDateTime.now());
-        if (board.getRegdate() != null) {
-            boardDto.setUpdate(LocalDateTime.now());
-        }
+        boardDto.setRegdate(board.getRegdate());
+        boardDto.setUpdate(board.getUpdate());
         return boardDto;
     }
 
+
     public static BoardDto updateBoardDto(Board board) {
         BoardDto updated = new BoardDto();
+        updated.setBoardId(board.getId());
         updated.setBoardTitle(board.getBoardTitle());
         updated.setBoardContent(board.getBoardContent());
+        updated.setLoginId(board.getMember().getLoginId());
+        updated.setRegdate(board.getRegdate());
+        updated.setUpdate(board.getUpdate());
+        updated.setViewCount(board.getViewCount());
+        updated.setMemberId(board.getMember().getId());
         return updated;
     }
 

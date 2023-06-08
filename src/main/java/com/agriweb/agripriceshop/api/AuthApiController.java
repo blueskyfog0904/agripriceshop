@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -45,6 +45,7 @@ public class AuthApiController {
 
     }
 
+    // 로그인 API
     @Operation(summary = "auth 로그인 메서드", description = "auth로그인 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation"),
@@ -59,5 +60,63 @@ public class AuthApiController {
         return tokenInfo;
 
     }
+
+    // 전체 회원 조회 API
+    @Operation(summary = "전체회원조회 메서드", description = "전체회원조회 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @GetMapping("/user/members/list")
+    public List<Member> list() {
+        return memberService.findMembers();
+    }
+
+    // 회원 한명 조회 API
+    @Operation(summary = "회원 한명 조회 메서드", description = "회원 한명 조회 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @GetMapping("/user/members/{loginId}")
+    public Member indexOne(@PathVariable String loginId) {
+        return memberService.findOnebyLoginId(loginId);
+    }
+
+    // 회원 수정 API
+    @Operation(summary = "회원정보수정 메서드", description = "회원정보수정 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @PutMapping("/user/members/{loginId}")
+    public ResponseEntity<Member> updateMember(@PathVariable String loginId,
+                                               @RequestBody MemberDto dto){
+
+        Member updated = memberService.update(loginId, dto);
+        return (updated !=null) ? ResponseEntity.status(HttpStatus.OK).body(updated):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+    }
+
+    // 회원 삭제 API
+    @Operation(summary = "회원정보삭제 메서드", description = "회원정보삭제 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @DeleteMapping("/admin/members/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+
+        Member target = memberService.findOne(id);
+        String loginId = target.getLoginId();
+        memberService.delete(id);
+        Member delete = memberService.findOne(id);
+
+        return (delete == null) ? ResponseEntity.ok(loginId + " 회원정보가 삭제되었습니다.") :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원정보 삭제에 실패하였습니다.");
+
+    }
+
 
 }

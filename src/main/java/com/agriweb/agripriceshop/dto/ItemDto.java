@@ -47,7 +47,7 @@ public class ItemDto {
         dto.setStockQuantity(item.getStockQuantity());
         dto.setCategory(item.getItemCategory());
         dto.setLoginId(loginId);
-        dto.setRegdate(dto.getRegdate());
+        dto.setRegdate(item.getRegdate());
         dto.setUpdate(item.getUpdate());
         dto.setViewCount(item.getViewCount());
         dto.setOrderCount(item.getOrderCount());

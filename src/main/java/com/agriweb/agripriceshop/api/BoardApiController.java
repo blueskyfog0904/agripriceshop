@@ -58,7 +58,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @GetMapping("/api/boards")
-    public List<Board> index() {
+    public List<Board> list() {
         return boardService.findBoards();
     }
 
@@ -68,7 +68,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/boards/{loginId}")
+    @GetMapping("/api/boards/{loginId}")
     public List<Board> findByLoginId(@PathVariable String loginId) {
         return boardService.findByLoginId(loginId);
     }
