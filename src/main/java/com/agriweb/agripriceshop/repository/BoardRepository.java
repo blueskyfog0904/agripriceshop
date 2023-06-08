@@ -25,7 +25,7 @@ public class BoardRepository {
 
     // 게시판 ID로 검색시
     public List<Board> findByloginId(String loginId) {
-        String query = "select b from Board b inner join b.member m"
+        String query = "select b from Board b inner join b.member m "
         + "where m.loginId = :loginId";
 
         return em.createQuery(query, Board.class)

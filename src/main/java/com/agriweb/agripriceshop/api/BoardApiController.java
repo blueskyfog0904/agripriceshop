@@ -68,7 +68,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/boards/{loginId}")
+    @PostMapping("/api/boards/{loginId}")
     public List<Board> findByLoginId(@PathVariable String loginId) {
         return boardService.findByLoginId(loginId);
     }
@@ -95,7 +95,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/user/boards/{postId}")
+    @DeleteMapping("/user/boards/{boardId}")
     public ResponseEntity<String> delete(@PathVariable Long boardId) {
 
         if (boardService.findOne(boardId) != null ) {
