@@ -1,5 +1,6 @@
 package com.agriweb.agripriceshop.api;
 
+import com.agriweb.agripriceshop.config.SecurityUtil;
 import com.agriweb.agripriceshop.domain.Board;
 import com.agriweb.agripriceshop.domain.Member;
 import com.agriweb.agripriceshop.dto.BoardDto;
@@ -38,10 +39,9 @@ public class BoardApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/user/boards")
-    public ResponseEntity<BoardDto> create(@RequestBody BoardDto dto, String loginId) {
-//        Member member = memberService.findOnebyLoginId(loginId);
-//         하기 주석 코드는 테스트를 위해서 사용한 코드, 전체 테스트 후 이상 없으면 삭제할 예정(5/29)
-        Member member = memberService.findOnebyLoginId(dto.getLoginId());
+    public ResponseEntity<BoardDto> create(@RequestBody BoardDto dto) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+        Member member = memberService.findOnebyLoginId(loginId);
         Board board = Board.createBoard(dto, member);
         Board created = boardService.create(board);
         BoardDto createdDto = BoardDto.createBoardDto(created, member);
