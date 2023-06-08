@@ -1,5 +1,7 @@
 package com.agriweb.agripriceshop.api;
 
+import com.agriweb.agripriceshop.config.SecurityUtil;
+import com.agriweb.agripriceshop.domain.Member;
 import com.agriweb.agripriceshop.domain.Order;
 import com.agriweb.agripriceshop.dto.OrderSearch;
 import com.agriweb.agripriceshop.service.ItemService;
@@ -33,9 +35,11 @@ public class OrderApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/user/order")
-    public ResponseEntity<String> order(@RequestParam("memberId") Long memberId,
-                                @RequestParam("itemId") Long itemId,
+    public ResponseEntity<String> order(@RequestParam("itemId") Long itemId,
                                 @RequestParam("count") int count) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+        Member member = memberService.findOnebyLoginId(loginId);
+        Long memberId = member.getId();
         Long ordered = orderService.order(memberId, itemId, count);
         return (ordered != null)? ResponseEntity.ok("주문이 완료되었습니다."):
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주문이 실패하였습니다.");

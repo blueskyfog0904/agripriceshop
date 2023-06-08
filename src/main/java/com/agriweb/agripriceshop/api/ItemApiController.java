@@ -1,6 +1,7 @@
 package com.agriweb.agripriceshop.api;
 
 
+import com.agriweb.agripriceshop.config.SecurityUtil;
 import com.agriweb.agripriceshop.domain.Item;
 import com.agriweb.agripriceshop.domain.ItemCategory;
 import com.agriweb.agripriceshop.domain.Member;
@@ -40,7 +41,8 @@ public class ItemApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/admin/items")
-    public ResponseEntity<ItemDto> create(@RequestBody ItemDto dto, String loginId) {
+    public ResponseEntity<ItemDto> create(@RequestBody ItemDto dto) {
+        String loginId = SecurityUtil.getCurrentLoginId();
         // loginId를 이용해서 Member 정보 가져오기
         Member loginMember = memberService.findOnebyLoginId(loginId);
         // ItemDto에 Regdate에 현재시간 입력
