@@ -77,7 +77,7 @@ public class MemberService {
         Member target = memberRepository.findOneByLoginId(loginId);
 
         // 2. 잘못된 요청 처리
-        if(target == null || target.getLoginId() != loginId) {
+        if(target == null || !target.getLoginId().equals(loginId)) {
             return null;
         }
 
@@ -100,8 +100,8 @@ public class MemberService {
 
     // 회원 정보 삭제
     @Transactional
-    public void delete(Long id) {
-        Member target = memberRepository.findOne(id);
+    public void delete(String loginId) {
+        Member target = memberRepository.findOneByLoginId(loginId);
 
         // 삭제
         memberRepository.deleteOne(target);

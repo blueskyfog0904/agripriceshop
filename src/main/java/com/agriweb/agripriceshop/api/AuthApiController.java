@@ -32,7 +32,7 @@ public class AuthApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/api/auth/signup")
-    public ResponseEntity<MemberDto> signup(@RequestBody MemberDto memberDto){
+    public ResponseEntity<MemberDto> signup(@RequestBody MemberDto memberDto) {
 
 
         Member member = Member.createMember(memberDto);
@@ -91,10 +91,10 @@ public class AuthApiController {
     })
     @PutMapping("/user/members/{loginId}")
     public ResponseEntity<Member> updateMember(@PathVariable String loginId,
-                                               @RequestBody MemberDto dto){
+                                               @RequestBody MemberDto dto) {
 
         Member updated = memberService.update(loginId, dto);
-        return (updated !=null) ? ResponseEntity.status(HttpStatus.OK).body(updated):
+        return (updated != null) ? ResponseEntity.status(HttpStatus.OK).body(updated) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
     }
@@ -105,18 +105,19 @@ public class AuthApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/admin/members/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    @DeleteMapping("/admin/members/{loginId}")
+    public ResponseEntity<String> delete(@PathVariable String loginId) {
 
-        Member target = memberService.findOne(id);
-        String loginId = target.getLoginId();
-        memberService.delete(id);
-        Member delete = memberService.findOne(id);
+        Member target = memberService.findOnebyLoginId(loginId);
+        if (target != null) {
+            memberService.delete(loginId);
+            target = memberService.findOnebyLoginId(loginId);
+            return (target == null) ? ResponseEntity.ok(loginId + " 회원정보가 삭제되었습니다.") :
+                    ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원정보 삭제에 실패하였습니다.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
 
-        return (delete == null) ? ResponseEntity.ok(loginId + " 회원정보가 삭제되었습니다.") :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원정보 삭제에 실패하였습니다.");
 
     }
-
-
 }
