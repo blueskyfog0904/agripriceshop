@@ -31,14 +31,16 @@ public class SecurityConfig  {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//                .requestMatchers("/admin").hasRole("ADMIN")
-//                .requestMatchers("/user").hasAnyRole("ROLE_USER", "ROLE_ADMIN")
-//                .requestMatchers("/api").permitAll()
+                .requestMatchers("/admin").hasRole("ADMIN")
+                .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/api").permitAll()
 //                .requestMatchers("/api/auth/login", "/api/auth/signup").permitAll()
-                .requestMatchers("/**").permitAll()
+//                .requestMatchers("/**").permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
