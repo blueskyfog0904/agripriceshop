@@ -110,9 +110,8 @@ public class AuthApiController {
 
         Member target = memberService.findOnebyLoginId(loginId);
         if (target != null) {
-            memberService.delete(loginId);
-            target = memberService.findOnebyLoginId(loginId);
-            return (target == null) ? ResponseEntity.ok(loginId + " 회원정보가 삭제되었습니다.") :
+            String deletedLoginId = memberService.delete(target);
+            return (deletedLoginId != null) ? ResponseEntity.ok(deletedLoginId + " 회원정보가 삭제되었습니다.") :
                     ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원정보 삭제에 실패하였습니다.");
         } else {
             return ResponseEntity.notFound().build();

@@ -1,6 +1,7 @@
 package com.agriweb.agripriceshop.service;
 
 import com.agriweb.agripriceshop.domain.*;
+import com.agriweb.agripriceshop.dto.OrderDto;
 import com.agriweb.agripriceshop.dto.OrderSearch;
 import com.agriweb.agripriceshop.repository.ItemRepository;
 import com.agriweb.agripriceshop.repository.MemberRepository;
@@ -27,23 +28,28 @@ public class OrderService {
      */
 
     @Transactional
-    public Long order(Long memberId, Long itemId, int count) {
+    public Long order(Long memberId, OrderDto orderDto) {
         // 엔티티 조회
         Member member = memberRepository.findOne(memberId);
-        Item item = itemRepository.findOne(itemId);
+        System.out.println("오더dto" + orderDto.getItemId());
+        Item item = itemRepository.findOne(orderDto.getItemId());
 
         // 배송정보 생성
         Delivery delivery = new Delivery();
-        delivery.setAddr(member.getAddr());
+        delivery.setDeliveryName(orderDto.getDeliveryName());
+        delivery.setDeliveryAddr(orderDto.getDeliveryAddr());
+        delivery.setDeliveryTel(orderDto.getDeliveryTel());
 
         // 주문 상품 생성
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
+        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), orderDto.getCount());
 
         // 주문 생성
         Order order = Order.createOrder(member, delivery, orderItem);
 
         // 주문 저장
         orderRepository.save(order);
+        delivery.setOrder(order);
+        delivery.setStatus(DeliveryStatus.READY);
         return order.getId();
 
     }

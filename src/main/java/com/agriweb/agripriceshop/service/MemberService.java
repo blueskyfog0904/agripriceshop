@@ -5,6 +5,7 @@ import com.agriweb.agripriceshop.dto.MemberDto;
 import com.agriweb.agripriceshop.jwt.JwtTokenProvider;
 import com.agriweb.agripriceshop.jwt.TokenInfo;
 import com.agriweb.agripriceshop.repository.MemberRepository;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -65,7 +66,12 @@ public class MemberService {
     // 회원 1명의 정보 조회(loginId)
     @Transactional
     public Member findOnebyLoginId(String loginId) {
-        return memberRepository.findOneByLoginId(loginId);
+        try{
+            return memberRepository.findOneByLoginId(loginId);
+        } catch (NoResultException e) {
+            return null;
+        }
+
     }
 
 
@@ -100,11 +106,10 @@ public class MemberService {
 
     // 회원 정보 삭제
     @Transactional
-    public void delete(String loginId) {
-        Member target = memberRepository.findOneByLoginId(loginId);
-
+    public String delete(Member member) {
         // 삭제
-        memberRepository.deleteOne(target);
+        memberRepository.deleteOne(member);
+        return member.getLoginId();
     }
 
 

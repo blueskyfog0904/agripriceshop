@@ -17,10 +17,11 @@ public class CommentRepository {
     public void save(Comment c) {
         em.persist(c);
     }
+
     // 게시글의 댓글 조회
     public List<Comment> findByBoardId(Long boardId) {
-        String query = "select c from Comment c inner join c.board b"
-                + "where b.boardId = :boardId";
+        String query = "select c from Comment c inner join c.board b "
+                + "where b.id = :boardId";
 
         return em.createQuery(query, Comment.class)
                 .setParameter("boardId", boardId)

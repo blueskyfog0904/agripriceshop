@@ -36,8 +36,6 @@ public class Comment {
         // 예외 처리
         if (dto.getId() != null)
             throw new IllegalArgumentException("댓글 생성 실패! 댓글의 id가 없어야 합니다.");
-        if (dto.getBoardId() != board.getId())
-            throw new IllegalArgumentException("댓글 생성 실패! 게시글의 id가 잘못되었습니다.");
         dto.setRegdate(LocalDateTime.now());
 
         // 엔티티 생성 및 반환
@@ -53,7 +51,7 @@ public class Comment {
         if (dto.getCmContent() != null) {
             this.cmContent = dto.getCmContent();
         }
-        this.regdate = LocalDateTime.now();
+        this.update = LocalDateTime.now();
 
     }
 

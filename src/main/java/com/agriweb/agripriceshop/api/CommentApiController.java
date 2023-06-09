@@ -53,7 +53,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/boards/{boardId}/commetns")
+    @GetMapping("/api/boards/{boardId}/comments")
     public ResponseEntity<List<CommentDto>> comments(@PathVariable Long boardId) {
         List<CommentDto> dtos = commentService.comments(boardId);
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
@@ -79,11 +79,11 @@ public class CommentApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @DeleteMapping("/user/comments/{commentId}")
-    public ResponseEntity<CommentDto> delete(@PathVariable Long commentId) {
+    public ResponseEntity<String> delete(@PathVariable Long commentId) {
 
         CommentDto deleteDto = commentService.delete(commentId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
+        return ResponseEntity.status(HttpStatus.OK).body("댓글이 삭제되었습니다.");
     }
 
 
