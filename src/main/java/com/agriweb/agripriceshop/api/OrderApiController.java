@@ -3,7 +3,9 @@ package com.agriweb.agripriceshop.api;
 import com.agriweb.agripriceshop.config.SecurityUtil;
 import com.agriweb.agripriceshop.domain.Member;
 import com.agriweb.agripriceshop.domain.Order;
+import com.agriweb.agripriceshop.domain.OrderStatus;
 import com.agriweb.agripriceshop.dto.OrderDto;
+import com.agriweb.agripriceshop.dto.OrderResponseDto;
 import com.agriweb.agripriceshop.dto.OrderSearch;
 import com.agriweb.agripriceshop.service.ItemService;
 import com.agriweb.agripriceshop.service.MemberService;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +39,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/user/order")
-    public ResponseEntity<String> order(OrderDto orderDto) {
+    public ResponseEntity<String> order(@RequestBody OrderDto orderDto) {
         String loginId = SecurityUtil.getCurrentLoginId();
         Member member = memberService.findOnebyLoginId(loginId);
         Long memberId = member.getId();
@@ -51,10 +54,39 @@ public class OrderApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @GetMapping("/user/orders")
-    public List<Order> orderList(@RequestParam OrderSearch orderSearch) {
-        return orderService.findOrders(orderSearch);
+    public List<OrderResponseDto> orderList(@RequestParam(name = "loginId",required = false) String  loginId,
+                                            @RequestParam(name="orderStatus", required = false)OrderStatus orderStatus) {
 
+            OrderSearch orderSearch = new OrderSearch();
+            if (loginId != null) {
+                orderSearch.setLoginId(loginId);
+            }
+            if (orderStatus != null) {
+                orderSearch.setOrderStatus(orderStatus);
+            }
+
+            return orderService.findOrders(orderSearch);
     }
+//    @GetMapping("/user/orders")
+//    public List<Order> orderList(@RequestParam(name = "loginId",required = false) String  loginId,
+//                                 @RequestParam(name="orderStatus", required = false)OrderStatus orderStatus) {
+//        if (loginId == null && orderStatus == null) {
+//            return null;
+//        }
+//        if (loginId != null && orderStatus == null) {
+//            List<Order> orders = orderService.findAllOrders();
+//            return orders;
+//        } else if (loginId == null && orderStatus != null) {
+//            List<Order> orders = orderService.findOrdersByOrderStatus(orderStatus);
+//            return orders;
+//        } else if (loginId != null && orderStatus != null) {
+//            List<Order> orders = orderService.findOrdersByIdNStatus(loginId, orderStatus);
+//            return orders;
+//        }
+//            return null;
+//    }
+
+
     @Operation(summary = "주문 취소 메서드", description = "주문 취소 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation"),
@@ -62,12 +94,27 @@ public class OrderApiController {
     })
     @PostMapping("/user/orders/{orderId}/cancel")
     public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId ) {
-        orderService.cancelOrder((orderId));
-        Order deleted = orderService.findOne(orderId);
-        return (deleted == null) ?
-                ResponseEntity.ok("주문이 취소되었습니다.") :
+        orderService.cancelOrder(orderId);
+        Order canceled = orderService.findOne(orderId);
+        return (canceled != null) ?
+                ResponseEntity.ok(canceled.getId()+"번 주문이 취소되었습니다.") :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주문 취소가 실패하였습니다.");
         }
+
+    @Operation(summary = "주문 완료 메서드", description = "주문 완료 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @PostMapping("/user/orders/{orderId}/finish")
+    public ResponseEntity<String> finishOrder(@PathVariable("orderId") Long orderId) {
+        Long finished = orderService.finishOrder(orderId);
+        return (finished != null) ?
+                ResponseEntity.ok(finished + "번 주문이 완료되었습니다.") :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주문 완료가 실패하였습니다.");
+
+    }
+
 
 }
 

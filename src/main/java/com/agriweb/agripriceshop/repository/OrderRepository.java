@@ -1,6 +1,8 @@
 package com.agriweb.agripriceshop.repository;
 
+import com.agriweb.agripriceshop.domain.Board;
 import com.agriweb.agripriceshop.domain.Order;
+import com.agriweb.agripriceshop.domain.OrderStatus;
 import com.agriweb.agripriceshop.dto.OrderSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -15,6 +17,11 @@ import java.util.List;
 public class OrderRepository {
 
     private final EntityManager em;
+
+    // 주문 전부 가져오기
+    public List<Order> findAll() {
+        return em.createQuery("select o from Order o", Order.class).getResultList();
+    }
 
     public void save(Order order) {
         em.persist(order);
@@ -48,7 +55,7 @@ public class OrderRepository {
             } else {
                 sql += " and";
             }
-            sql += " m.login_id like :login_id";
+            sql += " m.loginId like :login_id";
 
         }
 
@@ -59,12 +66,38 @@ public class OrderRepository {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
         if (orderSearch.getLoginId() != null) {
-            query = query.setParameter("name", orderSearch.getLoginId());
+            query = query.setParameter("login_id", orderSearch.getLoginId());
         }
 
         return query.getResultList();
 
     }
+
+    public List<Order> findOrdersByLoginId(String loginId) {
+        String query = "select o from Order o join o.member m where m.loginId like :loginId";
+
+        return em.createQuery(query, Order.class)
+                .setParameter("loginId", loginId)
+                .getResultList();
+    }
+
+    public List<Order> findOrdersByOrderStatus(OrderStatus orderStatus) {
+        String query = "select o from Order o where o.status = :status";
+
+        return em.createQuery(query, Order.class)
+                .setParameter("status", orderStatus)
+                .getResultList();
+    }
+
+    public List<Order> findOrdersByIdNStatus(String loginId, OrderStatus orderStatus) {
+        String query = "select o from Order o join o.member m where o.status = :status and m.loginId like :loginId";
+
+        return em.createQuery(query, Order.class)
+                .setParameter("loginId", loginId)
+                .setParameter("status", orderStatus)
+                .getResultList();
+    }
+
 
 
 

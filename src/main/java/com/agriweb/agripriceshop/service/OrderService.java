@@ -2,6 +2,7 @@ package com.agriweb.agripriceshop.service;
 
 import com.agriweb.agripriceshop.domain.*;
 import com.agriweb.agripriceshop.dto.OrderDto;
+import com.agriweb.agripriceshop.dto.OrderResponseDto;
 import com.agriweb.agripriceshop.dto.OrderSearch;
 import com.agriweb.agripriceshop.repository.ItemRepository;
 import com.agriweb.agripriceshop.repository.MemberRepository;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,7 +33,6 @@ public class OrderService {
     public Long order(Long memberId, OrderDto orderDto) {
         // 엔티티 조회
         Member member = memberRepository.findOne(memberId);
-        System.out.println("오더dto" + orderDto.getItemId());
         Item item = itemRepository.findOne(orderDto.getItemId());
 
         // 배송정보 생성
@@ -65,10 +66,66 @@ public class OrderService {
         order.cancel();
     }
 
-    // 주문 검색(상태 또는 구매자이름)
-    public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findAllByString(orderSearch);
+    public Long finishOrder(Long orderId) {
+        // 주문 엔티티 조회
+        Order order = orderRepository.findOne(orderId);
+        // 주문 완료
+        order.finish();
+        return order.getId();
     }
+
+    // 주문 검색(전체)
+    public List<Order> findAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    // 주문 검색(상태 또는 구매자이름)
+    public List<OrderResponseDto> findOrders(OrderSearch orderSearch) {
+        List<Order> orders = orderRepository.findAllByString(orderSearch);
+        List<OrderResponseDto> ordersDto = new ArrayList<OrderResponseDto>();
+        for (int i =0; i < orders.size(); i++) {
+            OrderResponseDto orderDto = new OrderResponseDto();
+            Order order = orders.get(i);
+
+            //OrderResponseDto set
+            orderDto.setOrderId(order.getId());
+            orderDto.setLoginId(order.getMember().getLoginId());
+            orderDto.setItemId(order.getOrderItems().get(0).getItem().getId());
+            orderDto.setItemName(order.getOrderItems().get(0).getItem().getName());
+            orderDto.setItemDesc(order.getOrderItems().get(0).getItem().getDesc());
+            orderDto.setItemPrice(order.getOrderItems().get(0).getItem().getPrice());
+            orderDto.setCount(order.getOrderItems().get(0).getCount());
+//            orderDto.setTotalPrice((order.getOrderItems().get(0).getItem().getPrice()*
+//                    order.getOrderItems().get(0).getItem().getOrderCount()));
+            orderDto.setTotalPrice(order.getOrderItems().get(0).getTotalPrice());
+            orderDto.setCategory(order.getOrderItems().get(0).getItem().getItemCategory());
+            orderDto.setOrderStatus(order.getOrderItems().get(0).getOrder().getStatus());
+            orderDto.setOrderDate(order.getOrderItems().get(0).getOrder().getOrderDate());
+            orderDto.setOrderCancelDate(order.getOrderCancelDate());
+            orderDto.setOrderCompleteDate(order.getOrderCompleteDate());
+            orderDto.setDeliveryStatus(order.getDelivery().getStatus());
+
+            ordersDto.add(orderDto);
+        }
+        return ordersDto;
+    }
+
+    // 주문 검색(회원 ID로)
+    public List<Order> findOrdersByLoginId(String loginId) {
+        return orderRepository.findOrdersByLoginId(loginId);
+    }
+
+    // 주문 검색(OrderStatus로)
+    public List<Order> findOrdersByOrderStatus(OrderStatus orderStatus) {
+        return orderRepository.findOrdersByOrderStatus(orderStatus);
+    }
+
+    // 주문 검색(회원 ID & Orderstatus)
+    public List<Order> findOrdersByIdNStatus(String loginId, OrderStatus orderStatus) {
+        return orderRepository.findOrdersByIdNStatus(loginId, orderStatus);
+    }
+
+
 
     // 주문 Id로 1개 검색
     public Order findOne(Long orderId) {
