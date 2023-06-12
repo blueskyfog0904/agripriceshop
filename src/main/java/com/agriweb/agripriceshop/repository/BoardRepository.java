@@ -3,6 +3,7 @@ package com.agriweb.agripriceshop.repository;
 import com.agriweb.agripriceshop.domain.Board;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,8 +20,17 @@ public class BoardRepository {
     }
 
     // 게시판 글 전부 가져오기
-    public List<Board> findAll() {
-        return em.createQuery("select b from Board b", Board.class).getResultList();
+//    public List<Board> findAll() {
+//        return em.createQuery("select b from Board b", Board.class).getResultList();
+//    }
+
+    // 게시판 글 전부 가져오기(페이징 처리
+    public List<Board> findAll(Pageable pageable) {
+
+        return em.createQuery("select b from Board b order by b.id desc", Board.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
     }
 
     // 게시판 ID로 검색시

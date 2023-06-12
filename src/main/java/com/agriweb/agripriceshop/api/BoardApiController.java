@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,15 +53,32 @@ public class BoardApiController {
 
     }
 
-    // 전체 글 조회 API
+//    // 전체 글 조회 API
+//    @Operation(summary = "게시글 전체 조회 작성 메서드", description = "게시글 전체 조회 메서드입니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "successful operation"),
+//            @ApiResponse(responseCode = "400", description = "bad request operation")
+//    })
+//    @GetMapping("/api/boards")
+//    public List<Board> list() {
+//        return boardService.findBoards();
+//    }
+
+    // 전체 글 조회 API(페이징)
     @Operation(summary = "게시글 전체 조회 작성 메서드", description = "게시글 전체 조회 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @GetMapping("/api/boards")
-    public List<Board> list() {
-        return boardService.findBoards();
+    public List<Board> list(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy
+            ) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+        return boardService.findBoards(pageable);
     }
 
     // 회원ID로 게시글 조회 api
