@@ -15,6 +15,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,15 +80,31 @@ public class ItemApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    //     아이템(상품) 전체 조회 API
-    @Operation(summary = "아이템(상품) 전체 조회 메서드", description = "아이템(상품) 전체 조회 메서드입니다.")
+//    //     아이템(상품) 전체 조회 API
+//    @Operation(summary = "아이템(상품) 전체 조회 메서드", description = "아이템(상품) 전체 조회 메서드입니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "successful operation"),
+//            @ApiResponse(responseCode = "400", description = "bad request operation")
+//    })
+//    @GetMapping("/api/items")
+//    public List<ItemDto> index() {
+//        return itemService.findItems();
+//    }
+
+    //     아이템(상품) 전체 조회 API (페이징)
+    @Operation(summary = "아이템(상품) 전체 조회 메서드(페이징)", description = "아이템(상품) 전체 조회 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @GetMapping("/api/items")
-    public List<ItemDto> index() {
-        return itemService.findItems();
+    public Page<ItemDto> list(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy
+    ) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+        return itemService.findItems(pageable);
     }
 
     // 아이템(상품) 카테고리로 조회 API

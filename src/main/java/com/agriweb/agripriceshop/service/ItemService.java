@@ -9,6 +9,9 @@ import com.agriweb.agripriceshop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,21 +73,21 @@ public class ItemService {
     }
 
     // 아이템(상품) 전체 조회
-    public List<ItemDto> findItems() {
+    public Page<ItemDto> findItems(Pageable pageable) {
 
         // 조회: 아이템(상품) 목록
-        List<Item> items =  itemRepository.findAll();
+        Page<Item> itemPage = itemRepository.findAll(pageable);
+        List<ItemDto> dtos = new ArrayList<>();
 
-        // 변환 엔티티 -> Dto
-        List<ItemDto> dtos = new ArrayList<ItemDto>();
-        for (int i = 0; i  < items.size(); i++) {
-            Item item = items.get(i);
+
+        for (Item item : itemPage) {
             Member member = memberRepository.findOne(item.getRegister().getId());
             String loginId = member.getLoginId();
             ItemDto dto = ItemDto.createItemDto(item, loginId);
             dtos.add(dto);
         }
-        return dtos;
+
+        return new PageImpl<>(dtos, pageable, itemPage.getTotalElements());
 
     }
 

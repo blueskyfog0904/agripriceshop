@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -71,12 +72,11 @@ public class BoardApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @GetMapping("/api/boards")
-    public List<Board> list(
+    public Page<Board> list(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy
             ) {
-
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return boardService.findBoards(pageable);
     }

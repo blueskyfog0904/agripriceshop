@@ -3,7 +3,11 @@ package com.agriweb.agripriceshop.repository;
 import com.agriweb.agripriceshop.domain.Item;
 import com.agriweb.agripriceshop.domain.ItemCategory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,10 +34,27 @@ public class ItemRepository {
         return em.find(Item.class, id);
     }
 
-    // 아이템(상품) 전체 조회
-    public List<Item> findAll() {
-        return em.createQuery("select i from Item i", Item.class)
-                .getResultList();
+//    // 아이템(상품) 전체 조회
+//    public List<Item> findAll() {
+//        return em.createQuery("select i from Item i", Item.class)
+//                .getResultList();
+//    }
+
+    // 아이템(상품) 전체 조회(페이징)
+    public Page<Item> findAll(Pageable pageable) {
+        TypedQuery<Item> query = em.createQuery("select i from Item i order by i.id desc", Item.class);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<Item> items = query.getResultList();
+        long total = getTotalCount();
+
+        return new PageImpl<>(items, pageable, total);
+    }
+
+    private long getTotalCount() {
+        TypedQuery<Long> countQuery = em.createQuery("select count(i) from Item i", Long.class);
+        return countQuery.getSingleResult();
     }
 
     // 아이템(상품) 카테고리로 조회

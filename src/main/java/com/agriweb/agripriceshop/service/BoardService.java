@@ -5,6 +5,7 @@ import com.agriweb.agripriceshop.dto.BoardDto;
 import com.agriweb.agripriceshop.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class BoardService {
 //    }
 
     // 게시글 전체 조회
-    public List<Board> findBoards(Pageable pageable) {
+    public Page<Board> findBoards(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
