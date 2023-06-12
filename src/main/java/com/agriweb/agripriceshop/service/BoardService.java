@@ -40,8 +40,8 @@ public class BoardService {
     }
 
     // loginId로 게시글 조회
-    public List<Board> findByLoginId(String loginId){
-        return boardRepository.findByloginId(loginId);
+    public Page<Board> findByLoginId(String loginId, Pageable pageable){
+        return boardRepository.findByloginId(loginId, pageable);
 
     }
 

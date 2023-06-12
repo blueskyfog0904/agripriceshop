@@ -56,15 +56,35 @@ public class ItemRepository {
         TypedQuery<Long> countQuery = em.createQuery("select count(i) from Item i", Long.class);
         return countQuery.getSingleResult();
     }
+    // 아이템(상품) 카테고리로 조회(페이징)
+    public Page<Item> findByCategory(ItemCategory itemCategory, Pageable pageable) {
+        TypedQuery<Item> query = em.createQuery("select i from Item i where i.itemCategory = :category order by i.id desc", Item.class);
+        query.setParameter("category", itemCategory);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
 
-    // 아이템(상품) 카테고리로 조회
-    public List<Item> findByCategory(ItemCategory itemCategory) {
-        String query = "select i from Item i where i.itemCategory = :category";
+        List<Item> items = query.getResultList();
+        long total = getTotalCountByCategory(itemCategory);
 
-        return em.createQuery(query, Item.class)
-                .setParameter("category", itemCategory)
-                .getResultList();
+        return new PageImpl<>(items, pageable, total);
+
     }
+
+    private long getTotalCountByCategory(ItemCategory itemCategory) {
+        TypedQuery<Long> countQuery = em.createQuery("select count(i) from Item i where i.itemCategory = : category", Long.class);
+        countQuery.setParameter("category", itemCategory);
+        return countQuery.getSingleResult();
+    }
+
+
+//    // 아이템(상품) 카테고리로 조회
+//    public List<Item> findByCategory(ItemCategory itemCategory) {
+//        String query = "select i from Item i where i.itemCategory = :category";
+//
+//        return em.createQuery(query, Item.class)
+//                .setParameter("category", itemCategory)
+//                .getResultList();
+//    }
 
     // 아이템(상품) 이름으로 조회
     public List<Item> findByName(String itemName) {

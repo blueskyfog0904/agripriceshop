@@ -88,8 +88,13 @@ public class BoardApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @GetMapping("/api/boards/{loginId}")
-    public List<Board> findByLoginId(@PathVariable String loginId) {
-        return boardService.findByLoginId(loginId);
+    public Page<Board> findByLoginId(@PathVariable String loginId,
+                 @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+                 @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+                 @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy
+                                     ) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+        return boardService.findByLoginId(loginId, pageable);
     }
 
     // 게시글 수정 API

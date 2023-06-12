@@ -92,22 +92,31 @@ public class ItemService {
     }
 
     // 아이템(상품) 카테고리로 조회
-    public List<ItemDto> findItemsByCategory(ItemCategory itemCategory) {
+    public Page<ItemDto> findItemsByCategory(ItemCategory itemCategory, Pageable pageable) {
         // 조회 : 아이템(상품) 카테고리로 조회
-        List<Item> items = itemRepository.findByCategory(itemCategory);
-
+        Page<Item> itemPage = itemRepository.findByCategory(itemCategory, pageable);
 
         // 변환 엔티티 -> Dto
-        List<ItemDto> dtos = new ArrayList<ItemDto>();
-        for (int i = 0; i < items.size(); i++) {
-            Item item = items.get(i);
+        List<ItemDto> dtos = new ArrayList<>();
+
+        for (Item item : itemPage) {
             Member member = memberRepository.findOne(item.getRegister().getId());
             String loginId = member.getLoginId();
             ItemDto dto = ItemDto.createItemDto(item, loginId);
             dtos.add(dto);
-
         }
-        return dtos;
+
+        return new PageImpl<>(dtos, pageable, itemPage.getTotalElements());
+
+//        for (int i = 0; i < items.size(); i++) {
+//            Item item = items.get(i);
+//            Member member = memberRepository.findOne(item.getRegister().getId());
+//            String loginId = member.getLoginId();
+//            ItemDto dto = ItemDto.createItemDto(item, loginId);
+//            dtos.add(dto);
+//
+//        }
+//        return dtos;
     }
 
     // 아이템(상품) 이름 검색으로 조회

@@ -52,15 +52,34 @@ public class BoardRepository {
         return countQuery.getSingleResult();
     }
 
-    // 게시판 ID로 검색시
-    public List<Board> findByloginId(String loginId) {
-        String query = "select b from Board b inner join b.member m "
-        + "where m.loginId = :loginId";
+    // 게시판 ID로 검색시(페이징)
+    public Page<Board> findByloginId(String loginId, Pageable pageable) {
+        TypedQuery<Board> query = em.createQuery("select b from Board b inner join b.member m where m.loginId = :loginId order by b.id desc", Board.class);
+        query.setParameter("loginId", loginId);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
 
-        return em.createQuery(query, Board.class)
-                .setParameter("loginId", loginId)
-                .getResultList();
+        List<Board> boards = query.getResultList();
+        long total = getTotalCountByLoginId(loginId);
+
+        return new PageImpl<>(boards, pageable, total);
+
     }
+    private long getTotalCountByLoginId(String loginId) {
+        TypedQuery<Long> countQuery = em.createQuery("select count(b) from Board b inner join b.member m where m.loginId = :loginId", Long.class);
+        countQuery.setParameter("loginId", loginId);
+        return countQuery.getSingleResult();
+    }
+
+//    // 게시판 ID로 검색시
+//    public List<Board> findByloginId(String loginId) {
+//        String query = "select b from Board b inner join b.member m "
+//        + "where m.loginId = :loginId";
+//
+//        return em.createQuery(query, Board.class)
+//                .setParameter("loginId", loginId)
+//                .getResultList();
+//    }
 
     // 게시글 수정시 게시글 조회
     public Board findOne(Long id) {
