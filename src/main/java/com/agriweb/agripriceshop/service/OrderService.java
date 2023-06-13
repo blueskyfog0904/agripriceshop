@@ -9,6 +9,10 @@ import com.agriweb.agripriceshop.repository.MemberRepository;
 import com.agriweb.agripriceshop.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,13 +84,11 @@ public class OrderService {
     }
 
     // 주문 검색(상태 또는 구매자이름)
-    public List<OrderResponseDto> findOrders(OrderSearch orderSearch) {
-        List<Order> orders = orderRepository.findAllByString(orderSearch);
-        List<OrderResponseDto> ordersDto = new ArrayList<OrderResponseDto>();
-        for (int i =0; i < orders.size(); i++) {
+    public Page<OrderResponseDto> findOrders(OrderSearch orderSearch, Pageable pageable) {
+        Page<Order> orders = orderRepository.findAllByString(orderSearch, pageable);
+        List<OrderResponseDto> ordersDtos = new ArrayList<OrderResponseDto>();
+        for (Order order : orders) {
             OrderResponseDto orderDto = new OrderResponseDto();
-            Order order = orders.get(i);
-
             //OrderResponseDto set
             orderDto.setOrderId(order.getId());
             orderDto.setLoginId(order.getMember().getLoginId());
@@ -105,9 +107,35 @@ public class OrderService {
             orderDto.setOrderCompleteDate(order.getOrderCompleteDate());
             orderDto.setDeliveryStatus(order.getDelivery().getStatus());
 
-            ordersDto.add(orderDto);
+            ordersDtos.add(orderDto);
         }
-        return ordersDto;
+        return new PageImpl<>(ordersDtos, pageable, orders.getTotalElements());
+
+//        for (int i =0; i < orders.size(); i++) {
+//            OrderResponseDto orderDto = new OrderResponseDto();
+//            Order order = orders.get(i);
+//
+//            //OrderResponseDto set
+//            orderDto.setOrderId(order.getId());
+//            orderDto.setLoginId(order.getMember().getLoginId());
+//            orderDto.setItemId(order.getOrderItems().get(0).getItem().getId());
+//            orderDto.setItemName(order.getOrderItems().get(0).getItem().getName());
+//            orderDto.setItemDesc(order.getOrderItems().get(0).getItem().getDesc());
+//            orderDto.setItemPrice(order.getOrderItems().get(0).getItem().getPrice());
+//            orderDto.setCount(order.getOrderItems().get(0).getCount());
+////            orderDto.setTotalPrice((order.getOrderItems().get(0).getItem().getPrice()*
+////                    order.getOrderItems().get(0).getItem().getOrderCount()));
+//            orderDto.setTotalPrice(order.getOrderItems().get(0).getTotalPrice());
+//            orderDto.setCategory(order.getOrderItems().get(0).getItem().getItemCategory());
+//            orderDto.setOrderStatus(order.getOrderItems().get(0).getOrder().getStatus());
+//            orderDto.setOrderDate(order.getOrderItems().get(0).getOrder().getOrderDate());
+//            orderDto.setOrderCancelDate(order.getOrderCancelDate());
+//            orderDto.setOrderCompleteDate(order.getOrderCompleteDate());
+//            orderDto.setDeliveryStatus(order.getDelivery().getStatus());
+//
+//            ordersDtos.add(orderDto);
+//        }
+
     }
 
     // 주문 검색(회원 ID로)

@@ -131,8 +131,15 @@ public class ItemApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/api/items/findname")
-    public List<ItemDto> indexByCategory(@RequestParam String findName) {
-        return itemService.findItemsByName(findName);
+    public Page<ItemDto> indexByCategory(@RequestParam String findName,
+         @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+         @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+         @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy
+
+    ) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+        return itemService.findItemsByName(findName, pageable);
     }
 
 

@@ -120,21 +120,23 @@ public class ItemService {
     }
 
     // 아이템(상품) 이름 검색으로 조회
-    public List<ItemDto> findItemsByName(String findName) {
+    public Page<ItemDto> findItemsByName(String findName, Pageable pageable) {
+
+
         // 조회 : 아이템(상품) 이름 검색으로 조회
-        List<Item> items = itemRepository.findByName(findName);
+        Page<Item> itemPage = itemRepository.findByName(findName, pageable);
 
         // 변환 엔티티 -> Dto
-        List<ItemDto> dtos = new ArrayList<ItemDto>();
-        for (int i = 0; i < items.size(); i++) {
-            Item item = items.get(i);
+        List<ItemDto> dtos = new ArrayList<>();
+
+        for (Item item : itemPage) {
             Member member = memberRepository.findOne(item.getRegister().getId());
             String loginId = member.getLoginId();
             ItemDto dto = ItemDto.createItemDto(item, loginId);
             dtos.add(dto);
-
         }
-        return dtos;
+
+        return new PageImpl<>(dtos, pageable, itemPage.getTotalElements());
 
     }
 

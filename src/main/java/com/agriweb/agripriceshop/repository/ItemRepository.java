@@ -87,13 +87,24 @@ public class ItemRepository {
 //    }
 
     // 아이템(상품) 이름으로 조회
-    public List<Item> findByName(String itemName) {
-        String query = "select i from Item i where lower(i.name) LIKE CONCAT('%', LOWER(:itemName), '%')";
+    public Page<Item> findByName(String itemName, Pageable pageable) {
+        TypedQuery<Item> query = em.createQuery("select i from Item i where lower(i.name) LIKE CONCAT('%', LOWER(:itemName), '%') order by i.id desc", Item.class);
+        query.setParameter("itemName", itemName);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
 
-        return em.createQuery(query, Item.class)
-                .setParameter("itemName", itemName)
-                .getResultList();
+        List<Item> items = query.getResultList();
+        long total = getTotalCountByName(itemName);
+
+        return new PageImpl<>(items, pageable, total);
     }
+    private long getTotalCountByName(String itemName) {
+        TypedQuery<Long> countQuery = em.createQuery("select count(i) from Item i where lower(i.name) LIKE CONCAT('%', LOWER(:itemName), '%')", Long.class);
+        countQuery.setParameter("itemName", itemName);
+        return countQuery.getSingleResult();
+    }
+
+
 
     // 아이템(상품) 삭제
     public void deleteOne(Item item) {
