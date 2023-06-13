@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -62,7 +63,7 @@ public class OrderRepository {
         }
         sql += " order by o.id desc";
 
-        TypedQuery<Order> query = em.createQuery(sql, Order.class)
+        TypedQuery<Order> query = em.createQuery(sql, Order.class);
 
 
         if (orderSearch.getOrderStatus() != null) {
@@ -76,6 +77,8 @@ public class OrderRepository {
 
         List<Order> orders = query.getResultList();
         long total = getTotalCountBySearch(orderSearch);
+
+        return new PageImpl<>(orders, pageable, total);
 
     }
 
