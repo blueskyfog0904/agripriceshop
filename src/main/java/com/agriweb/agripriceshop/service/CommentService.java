@@ -10,6 +10,9 @@ import com.agriweb.agripriceshop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,18 +55,27 @@ public class CommentService {
     }
 
     // 게시글 댓글 가져오기
-    public List<CommentDto> comments(Long boardId) {
+    public Page<CommentDto> comments(Long boardId, Pageable pageable) {
         // 댓글 목록 조회
-        List<Comment> comments = commentRepository.findByBoardId(boardId);
+        Page<Comment> commentPage = commentRepository.findByBoardId(boardId, pageable);
 
         // 엔티티 -> DTO로 변환
         List<CommentDto> dtos = new ArrayList<CommentDto>();
-        for(int i =0; i < comments.size(); i++) {
-            Comment c = comments.get(i);
-            CommentDto dto = CommentDto.createCommentDto(c);
+
+        for (Comment comment : commentPage) {
+            CommentDto dto = CommentDto.createCommentDto(comment);
             dtos.add(dto);
+
         }
-        return dtos;
+        return new PageImpl<>(dtos, pageable, commentPage.getTotalElements());
+
+
+//        for(int i =0; i < comments.size(); i++) {
+//            Comment c = comments.get(i);
+//            CommentDto dto = CommentDto.createCommentDto(c);
+//            dtos.add(dto);
+//        }
+//        return dtos;
     }
 
     // 댓글 수정

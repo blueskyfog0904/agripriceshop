@@ -12,6 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,9 +58,15 @@ public class CommentApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @GetMapping("/api/boards/{boardId}/comments")
-    public ResponseEntity<List<CommentDto>> comments(@PathVariable Long boardId) {
-        List<CommentDto> dtos = commentService.comments(boardId);
-        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+    public Page<CommentDto> comments(@PathVariable Long boardId,
+                 @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+                 @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+                 @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy
+
+    ) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+        return commentService.comments(boardId, pageable);
+
     }
 
     // 댓글 수정 API
