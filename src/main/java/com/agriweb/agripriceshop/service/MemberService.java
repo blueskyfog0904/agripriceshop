@@ -8,6 +8,8 @@ import com.agriweb.agripriceshop.repository.MemberRepository;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -54,8 +56,9 @@ public class MemberService {
     }
 
     // 회원 전체 조회
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
+    public Page<Member> findMembers(Pageable pageable) {
+
+        return memberRepository.findAll(pageable);
     }
 
     // 회원 1명의 정보 조회(id)

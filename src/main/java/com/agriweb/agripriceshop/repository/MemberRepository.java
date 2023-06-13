@@ -3,7 +3,11 @@ package com.agriweb.agripriceshop.repository;
 import com.agriweb.agripriceshop.domain.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,8 +29,21 @@ public class MemberRepository {
     }
 
     // 회원 전체 리스트 가져오기
-    public List<Member> findAll() {
-        return em.createQuery("select m from Member m", Member.class).getResultList();
+    public Page<Member> findAll(Pageable pageable) {
+        TypedQuery<Member> query = em.createQuery("select m from Member m order by m.id desc", Member.class);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<Member> members = query.getResultList();
+        long total = getTotalCount();
+
+        return new PageImpl<>(members, pageable, total);
+
+    };
+
+    private long getTotalCount() {
+        TypedQuery<Long> countQuery = em.createQuery("select count(m) from Member m order", Long.class);
+        return countQuery.getSingleResult();
     }
 
     // 회원가입시 중복ID 확인
