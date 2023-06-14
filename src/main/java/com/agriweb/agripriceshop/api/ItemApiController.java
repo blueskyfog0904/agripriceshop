@@ -44,7 +44,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/admin/items")
+    @PostMapping("/api/admin/items")
     public ResponseEntity<ItemDto> create(@RequestBody ItemDto dto) {
         String loginId = SecurityUtil.getCurrentLoginId();
         // loginId를 이용해서 Member 정보 가져오기
@@ -69,7 +69,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping("/admin/items/{itemId}")
+    @PutMapping("/api/admin/items/{itemId}")
     public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody ItemDto dto) {
         //ItemDto에 Update에 현재시간 입력
         dto.setUpdate(LocalDateTime.now());

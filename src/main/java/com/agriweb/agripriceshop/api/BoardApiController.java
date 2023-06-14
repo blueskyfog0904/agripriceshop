@@ -41,7 +41,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/user/boards")
+    @PostMapping("/api/user/boards")
     public ResponseEntity<BoardDto> create(@RequestBody BoardDto dto) {
         String loginId = SecurityUtil.getCurrentLoginId();
         Member member = memberService.findOnebyLoginId(loginId);

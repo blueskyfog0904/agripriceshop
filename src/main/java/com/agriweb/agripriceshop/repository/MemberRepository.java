@@ -42,7 +42,7 @@ public class MemberRepository {
     };
 
     private long getTotalCount() {
-        TypedQuery<Long> countQuery = em.createQuery("select count(m) from Member m order", Long.class);
+        TypedQuery<Long> countQuery = em.createQuery("select count(m) from Member m", Long.class);
         return countQuery.getSingleResult();
     }
 
