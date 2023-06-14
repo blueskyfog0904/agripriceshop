@@ -97,7 +97,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/items")
+    @GetMapping("/api/common/items")
     public Page<ItemDto> list(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -113,7 +113,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/items/category")
+    @PostMapping("/api/common/items/category")
     public Page<ItemDto> indexByCategory(@RequestParam ItemCategory itemCategory,
         @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
         @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -130,7 +130,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/items/findname")
+    @PostMapping("/api/common/items/findname")
     public Page<ItemDto> indexByCategory(@RequestParam String findName,
          @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
          @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -152,7 +152,7 @@ public class ItemApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/admin/items/{id}")
+    @DeleteMapping("/api/admin/items/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         Item target = itemService.findOnebyId(id);
         String name = target.getName();

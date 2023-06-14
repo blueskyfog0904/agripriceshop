@@ -37,7 +37,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/user/boards/{boardId}/comments")
+    @PostMapping("/api/user/boards/{boardId}/comments")
     public ResponseEntity<CommentDto> create(@PathVariable Long boardId, @RequestBody CommentDto dto
                                              ) {
 
@@ -57,7 +57,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/boards/{boardId}/comments")
+    @GetMapping("/api/common/boards/{boardId}/comments")
     public Page<CommentDto> comments(@PathVariable Long boardId,
                  @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
                  @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -75,7 +75,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping("/user/comments/{commentId}")
+    @PutMapping("/api/user/comments/{commentId}")
     public ResponseEntity<CommentDto> update(@PathVariable Long commentId, @RequestBody CommentDto dto) {
         CommentDto updateDto = commentService.update(commentId, dto);
         return ResponseEntity.status(HttpStatus.OK).body(updateDto);
@@ -88,7 +88,7 @@ public class CommentApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/user/comments/{commentId}")
+    @DeleteMapping("/api/user/comments/{commentId}")
     public ResponseEntity<String> delete(@PathVariable Long commentId) {
 
         CommentDto deleteDto = commentService.delete(commentId);

@@ -42,7 +42,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/user/order")
+    @PostMapping("/api/user/order")
     public ResponseEntity<String> order(@RequestBody OrderDto orderDto) {
         String loginId = SecurityUtil.getCurrentLoginId();
         Member member = memberService.findOnebyLoginId(loginId);
@@ -57,7 +57,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/user/orders")
+    @GetMapping("/api/user/orders")
     public Page<OrderResponseDto> orderList(@RequestParam(name = "loginId",required = false) String  loginId,
                                             @RequestParam(name="orderStatus", required = false)OrderStatus orderStatus,
                                             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
@@ -104,7 +104,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/user/orders/{orderId}/cancel")
+    @PostMapping("/api/user/orders/{orderId}/cancel")
     public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId ) {
         orderService.cancelOrder(orderId);
         Order canceled = orderService.findOne(orderId);
@@ -118,7 +118,7 @@ public class OrderApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/user/orders/{orderId}/finish")
+    @PostMapping("/api/user/orders/{orderId}/finish")
     public ResponseEntity<String> finishOrder(@PathVariable("orderId") Long orderId) {
         Long finished = orderService.finishOrder(orderId);
         return (finished != null) ?

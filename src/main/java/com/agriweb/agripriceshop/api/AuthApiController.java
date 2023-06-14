@@ -37,7 +37,7 @@ public class AuthApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/auth/signup")
+    @PostMapping("/api/common/auth/signup")
     public ResponseEntity<MemberDto> signup(@RequestBody MemberDto memberDto) {
 
 
@@ -57,7 +57,7 @@ public class AuthApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PostMapping("/api/auth/login")
+    @PostMapping("/api/common/auth/login")
     public TokenInfo login(@RequestBody LoginDto dto) {
         String memberId = dto.getLoginId();
         String password = dto.getPw();
@@ -73,7 +73,7 @@ public class AuthApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/user/members/list")
+    @GetMapping("/api/user/members/list")
     public Page<Member> list(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -90,7 +90,7 @@ public class AuthApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/user/members/{loginId}")
+    @GetMapping("/api/user/members/{loginId}")
     public Member indexOne(@PathVariable String loginId) {
         return memberService.findOnebyLoginId(loginId);
     }
@@ -101,7 +101,7 @@ public class AuthApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping("/user/members/{loginId}")
+    @PutMapping("/api/user/members/{loginId}")
     public ResponseEntity<Member> updateMember(@PathVariable String loginId,
                                                @RequestBody MemberDto dto) {
 
@@ -117,7 +117,7 @@ public class AuthApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/admin/members/{loginId}")
+    @DeleteMapping("/api/admin/members/{loginId}")
     public ResponseEntity<String> delete(@PathVariable String loginId) {
 
         Member target = memberService.findOnebyLoginId(loginId);

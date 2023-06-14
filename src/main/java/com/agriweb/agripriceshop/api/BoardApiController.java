@@ -71,7 +71,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/boards")
+    @GetMapping("/api/common/boards")
     public Page<Board> list(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -87,7 +87,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @GetMapping("/api/boards/{loginId}")
+    @GetMapping("/api/common/boards/{loginId}")
     public Page<Board> findByLoginId(@PathVariable String loginId,
                  @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
                  @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -103,7 +103,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @PutMapping("/user/boards/{id}")
+    @PutMapping("/api/user/boards/{id}")
     public ResponseEntity<BoardDto> updateBoard(@PathVariable Long id, @RequestBody BoardDto dto) {
         Board updated = boardService.update(id, dto);
         BoardDto updatedDto = BoardDto.updateBoardDto(updated);
@@ -119,7 +119,7 @@ public class BoardApiController {
             @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
-    @DeleteMapping("/user/boards/{boardId}")
+    @DeleteMapping("/api/user/boards/{boardId}")
     public ResponseEntity<String> delete(@PathVariable Long boardId) {
 
         if (boardService.findOne(boardId) != null ) {
