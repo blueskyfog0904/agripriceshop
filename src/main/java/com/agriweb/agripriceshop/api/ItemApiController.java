@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,7 +46,9 @@ public class ItemApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PostMapping("/api/admin/items")
-    public ResponseEntity<ItemDto> create(@RequestBody ItemDto dto) {
+    public ResponseEntity<ItemDto> create(ItemDto dto,
+                                          @RequestParam("files") List<MultipartFile> files
+                                          ) throws Exception {
         String loginId = SecurityUtil.getCurrentLoginId();
         // loginId를 이용해서 Member 정보 가져오기
         Member loginMember = memberService.findOnebyLoginId(loginId);
@@ -54,7 +57,7 @@ public class ItemApiController {
         // Item 엔티티 생성
         Item target = Item.createItem(dto, loginMember);
         // 생성한 Item 엔티티를 저장
-        Item saved = itemService.create(target);
+        Item saved = itemService.create(target, files);
         // return 해줄 ItemDto를 생성
         ItemDto createdDto = ItemDto.createItemDto(saved, loginId);
         return (createdDto != null) ?
@@ -70,7 +73,10 @@ public class ItemApiController {
             @ApiResponse(responseCode = "400", description = "bad request operation")
     })
     @PutMapping("/api/admin/items/{itemId}")
-    public ResponseEntity<ItemDto> update(@PathVariable Long itemId, @RequestBody ItemDto dto) {
+    public ResponseEntity<ItemDto> update(@PathVariable Long itemId,
+                                          @RequestBody ItemDto dto,
+                                          @RequestParam("files") List<MultipartFile> files
+    ) {
         //ItemDto에 Update에 현재시간 입력
         dto.setUpdate(LocalDateTime.now());
         // 수정하려는 아이템 업데이트하기

@@ -2,8 +2,10 @@ package com.agriweb.agripriceshop.service;
 
 import com.agriweb.agripriceshop.domain.Item;
 import com.agriweb.agripriceshop.domain.ItemCategory;
+import com.agriweb.agripriceshop.domain.ItemPicture;
 import com.agriweb.agripriceshop.domain.Member;
 import com.agriweb.agripriceshop.dto.ItemDto;
+import com.agriweb.agripriceshop.repository.ItemPictureRepository;
 import com.agriweb.agripriceshop.repository.ItemRepository;
 import com.agriweb.agripriceshop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +16,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.ImageProducer;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +33,25 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     @Autowired
+    private final ItemPictureRepository itemPictureRepository;
+
+    @Autowired
     private final MemberRepository memberRepository;
 
+    @Autowired
+    private final FileHandler fileHandler;
+
     // 아이템(상품) 등록
-    public Item create(Item item) {
+    public Item create(Item item, List<MultipartFile> files) throws Exception {
+        // 파일을 저장하고 그 ItemPicture 에 대한 list를 가지고 있는다.
+        List<ItemPicture> list = fileHandler.parseFileInfo(item.getId(), files);
+
+        List<ItemPicture> pictureBeans = new ArrayList<>();
+        for (ItemPicture itemPicture : list) {
+            itemPictureRepository.save(itemPicture);
+            pictureBeans.add(itemPicture);
+        }
+        item.setPictures(pictureBeans);
 
         itemRepository.save(item);
         return item;

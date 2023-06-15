@@ -2,12 +2,16 @@ package com.agriweb.agripriceshop.domain;
 
 import com.agriweb.agripriceshop.dto.ItemDto;
 import com.agriweb.agripriceshop.exception.NotEnoughStockException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -43,6 +47,13 @@ public class Item {
     @ColumnDefault("0")
     private int orderCount;
 
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ItemPicture> pictures = new ArrayList<>();
+
+
+
     //== 생성 메서드==/
     public static Item createItem(ItemDto dto, Member loginMember) {
         Item item = new Item();
@@ -55,6 +66,7 @@ public class Item {
         item.setRegdate(dto.getRegdate());
         return item;
     }
+
 
     //== 비즈니스 로직==//
     /**

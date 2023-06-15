@@ -21,6 +21,8 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
+    private final FileHandler fileHandler;
+
     // 게시글 작성
     @Transactional
     public Board create(Board board) {

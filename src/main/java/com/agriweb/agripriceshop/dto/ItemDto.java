@@ -2,12 +2,15 @@ package com.agriweb.agripriceshop.dto;
 
 import com.agriweb.agripriceshop.domain.Item;
 import com.agriweb.agripriceshop.domain.ItemCategory;
+import com.agriweb.agripriceshop.domain.ItemPicture;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -37,6 +40,8 @@ public class ItemDto {
 
     private int orderCount;
 
+    private List<ItemPicture> itemPictures = new ArrayList<>();
+
     //==생성 메서드==//
     public static ItemDto createItemDto(Item item, String loginId){
         ItemDto dto = new ItemDto();
@@ -51,6 +56,7 @@ public class ItemDto {
         dto.setUpdate(item.getUpdate());
         dto.setViewCount(item.getViewCount());
         dto.setOrderCount(item.getOrderCount());
+        dto.setItemPictures(item.getPictures());
         return dto;
     }
 
