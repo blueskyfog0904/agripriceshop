@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.File;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,12 +22,9 @@ public class FileHandler {
     @Autowired
     private final ItemRepository itemRepository;
 
-    @Autowired
-    private final ResourceLoader resourceLoader;
 
-    public FileHandler(ItemRepository itemRepository, ResourceLoader resourceLoader) {
+    public FileHandler(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
-        this.resourceLoader = resourceLoader;
     }
 
     public List<ItemPicture> parseFileInfo(
@@ -52,9 +48,7 @@ public class FileHandler {
         String absolutePath = new File("").getAbsolutePath() + "\\";
 
         // 경로를 지정하고 그곳에다가 저장
-//        String path = "images/" + current_date;
-        URL resourceUrl = resourceLoader.getResource("classpath:images/").getURL();
-        String path = resourceUrl.getPath() + current_date;
+        String path = "src/main/resources/images/" + current_date;
         File file = new File(path);
         // 저장할 위치의 디렉토리가 존재하지 않을 경우
         if(!file.exists()) {
@@ -100,10 +94,9 @@ public class FileHandler {
                 fileList.add(itemPicture);
 
                 // 저장된 파일로 변경하여 이를 보여주기 위함
-//                file = new File(absolutePath + path + "/" + new_file_name);
-//                multipartFile.transferTo(file);
-                file = new File(path + "/" + new_file_name);
-                multipartFile.transferTo(resourceLoader.getResource("classpath:" + path).getFile());
+                file = new File(absolutePath + path + "/" + new_file_name);
+                multipartFile.transferTo(file);
+
             }
 
         }
