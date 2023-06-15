@@ -43,6 +43,9 @@ public class ItemService {
 
     // 아이템(상품) 등록
     public Item create(Item item, List<MultipartFile> files) throws Exception {
+
+        itemRepository.save(item);
+
         // 파일을 저장하고 그 ItemPicture 에 대한 list를 가지고 있는다.
         List<ItemPicture> list = fileHandler.parseFileInfo(item.getId(), files);
 
@@ -53,7 +56,6 @@ public class ItemService {
         }
         item.setPictures(pictureBeans);
 
-        itemRepository.save(item);
         return item;
 
     }
