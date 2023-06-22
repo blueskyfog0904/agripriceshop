@@ -97,6 +97,18 @@ public class BoardApiController {
         return boardService.findByLoginId(loginId, pageable);
     }
 
+    // 게시글 상세 조회 API
+    @Operation(summary = "게시글 상세조회 메서드", description = "게시글 상세조회 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation")
+    })
+    @GetMapping("/api/common/boards/{boardId}")
+    public Board indexOne(@PathVariable long boardId) {
+        return boardService.findOne(boardId);
+    }
+
+
     // 게시글 수정 API
     @Operation(summary = "게시글 수정 메서드", description = "게시글 수정 메서드입니다.")
     @ApiResponses(value = {
